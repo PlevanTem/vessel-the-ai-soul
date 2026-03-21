@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "opentwitter": {
+      "source": "6551Team/opentwitter-mcp",
+      "sourceType": "github",
+      "computedHash": "2fc6181d1b48542998c84640d04ab94e34de3773e2abceaa07e101a26eae4aa8"
+    }
+  }
+}

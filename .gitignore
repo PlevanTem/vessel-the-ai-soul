@@ -21,3 +21,9 @@ Thumbs.db
 
 # Pipeline artifacts (not needed for deployment)
 outputs/
+
+# Workspace-level ignores
+.agents/
+soulmkt/
+materials/souls-zip/
+reports/
