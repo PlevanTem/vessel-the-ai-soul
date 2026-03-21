@@ -1,21 +1,16 @@
 # Dependencies
 node_modules/
-outputs/**/node_modules/
 
 # Build output
 dist/
-outputs/**/dist/
 
 # Env files — NEVER commit
 .env
 .env.local
 .env.*
-outputs/**/.env
-outputs/**/.env.*
 
 # TypeScript cache
 tsconfig.tsbuildinfo
-outputs/**/tsconfig.tsbuildinfo
 
 # Logs
 *.log
@@ -23,3 +18,6 @@ outputs/**/tsconfig.tsbuildinfo
 # OS
 .DS_Store
 Thumbs.db
+
+# Pipeline artifacts (not needed for deployment)
+outputs/
