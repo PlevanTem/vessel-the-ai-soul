@@ -1,6 +1,7 @@
 import JSZip from 'jszip'
 import type { Soul } from '../types'
 import { supabase } from '../lib/supabase'
+import { getBundledSoulPackage } from './bundledSouls'
 
 // ── Fallback generators (used when real distilled files aren't available) ──
 
@@ -183,15 +184,21 @@ export async function downloadSoulZip(soul: Soul): Promise<void> {
   const folder = zip.folder(soul.slug)
   if (!folder) return
 
-  // Use real distilled files if available, otherwise generate from Soul data
-  const soulMdContent = soul.soulMd ?? buildFallbackSoulMd(soul)
-  const skillMdContent = soul.skillMd ?? buildFallbackSkillMd(soul)
-  const memoryMdContent = soul.memoryMd ?? buildFallbackMemoryMd(soul)
+  const bundled = getBundledSoulPackage(soul.slug)
+
+  // Prefer on-disk vessel/souls/{slug} bundle, then JSON fields, then fallbacks
+  const soulMdContent =
+    bundled.soulMd ?? soul.soulMd ?? buildFallbackSoulMd(soul)
+  const skillMdContent =
+    bundled.skillMd ?? soul.skillMd ?? buildFallbackSkillMd(soul)
+  const memoryMdContent =
+    bundled.memoryMd ?? soul.memoryMd ?? buildFallbackMemoryMd(soul)
+  const readmeContent = bundled.readmeMd ?? buildReadme(soul)
 
   folder.file('SOUL.md', soulMdContent)
   folder.file('SKILL.md', skillMdContent)
   folder.file('MEMORY.md', memoryMdContent)
-  folder.file('README.md', buildReadme(soul))
+  folder.file('README.md', readmeContent)
 
   const blob = await zip.generateAsync({ type: 'blob' })
   const url = URL.createObjectURL(blob)

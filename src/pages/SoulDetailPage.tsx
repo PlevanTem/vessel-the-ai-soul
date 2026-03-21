@@ -3,7 +3,9 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { souls } from '../data/souls'
 import { downloadSoulZip } from '../utils/downloadSoul'
+import { getBundledSoulPackage } from '../utils/bundledSouls'
 import { useAuth } from '../contexts/AuthContext'
+import type { VersionEntry } from '../types'
 
 function TypewriterText({ text, trigger }: { text: string; trigger: number }) {
   const [displayed, setDisplayed] = useState('')
@@ -53,6 +55,82 @@ function TypewriterText({ text, trigger }: { text: string; trigger: number }) {
   )
 }
 
+function VersionTimeline({ changelog }: { changelog: VersionEntry[] | undefined }) {
+  if (!changelog || changelog.length === 0) return null
+  return (
+    <div style={{ border: '1px solid var(--color-paper-border)', background: 'var(--color-paper)' }}>
+      <div className="px-4 py-2" style={{ borderBottom: '1px solid var(--color-paper-border)', background: 'var(--color-paper-dark)' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.1em', color: 'var(--color-ink-muted)' }}>
+          CHANGELOG
+        </span>
+      </div>
+      <div className="px-4 py-3 space-y-3">
+        {changelog.map((entry, i) => {
+          const isLatest = i === 0
+          return (
+            <div key={entry.version} className="flex gap-3">
+              {/* Timeline spine */}
+              <div className="flex flex-col items-center" style={{ flexShrink: 0, width: '0.75rem' }}>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.65rem',
+                    lineHeight: 1,
+                    color: isLatest ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                    marginTop: '0.1rem',
+                  }}
+                >
+                  {isLatest ? '●' : '○'}
+                </span>
+                {i < changelog.length - 1 && (
+                  <div
+                    style={{
+                      width: '1px',
+                      flexGrow: 1,
+                      marginTop: '0.2rem',
+                      background: 'var(--color-paper-border)',
+                      minHeight: '1rem',
+                    }}
+                  />
+                )}
+              </div>
+              {/* Content */}
+              <div style={{ paddingBottom: i < changelog.length - 1 ? '0.25rem' : 0 }}>
+                <div className="flex items-baseline gap-2 mb-0.5">
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      color: isLatest ? 'var(--color-accent)' : 'var(--color-ink-secondary)',
+                      letterSpacing: '0.04em',
+                    }}
+                  >
+                    v{entry.version}
+                  </span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--color-ink-faint)', letterSpacing: '0.04em' }}>
+                    {entry.date.replace(/-/g, '.')}
+                  </span>
+                </div>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.72rem',
+                    color: isLatest ? 'var(--color-ink-secondary)' : 'var(--color-ink-muted)',
+                    lineHeight: 1.55,
+                  }}
+                >
+                  {entry.summary}
+                </p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export default function SoulDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
@@ -64,6 +142,12 @@ export default function SoulDetailPage() {
   const [copiedFile, setCopiedFile] = useState<string | null>(null)
   const [downloading, setDownloading] = useState(false)
   const [downloadDone, setDownloadDone] = useState(false)
+  const [activeFile, setActiveFile] = useState<'soul' | 'skill' | 'memory'>('soul')
+
+  const bundled = soul ? getBundledSoulPackage(soul.slug) : {}
+  const soulContent = bundled.soulMd ?? soul?.filePreview ?? ''
+  const skillContent = bundled.skillMd ?? (soul?.skillPreview ?? null)
+  const memoryContent = bundled.memoryMd ?? (soul?.memoryPreview ?? null)
 
   const handleConvSwitch = (i: number) => {
     setActiveConvIndex(i)
@@ -290,127 +374,306 @@ export default function SoulDetailPage() {
               ))}
             </div>
 
-            {/* SOUL.md Preview */}
+            {/* FILE EXPLORER + PREVIEW */}
             <div>
-              {sectionLabel('SOUL.md PREVIEW')}
+              {sectionLabel('FILE EXPLORER')}
               <div style={{ border: '1px solid var(--color-paper-border)' }}>
-                {/* File bar */}
-                <div
-                  className="flex items-center justify-between px-4 py-2"
-                  style={{
-                    background: 'var(--color-paper-dark)',
-                    borderBottom: '1px solid var(--color-paper-border)',
-                  }}
-                >
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--color-ink-secondary)', letterSpacing: '0.06em' }}>
-                    ~/souls/{soul.slug}/SOUL.md
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--color-ink-faint)', letterSpacing: '0.08em' }}>
-                    PREVIEW ONLY
-                  </span>
-                </div>
-                {/* Truncated preview with ASCII redaction overlay */}
-                <div style={{ position: 'relative', overflow: 'hidden' }}>
-                  <pre
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
-                      lineHeight: 1.75,
-                      color: 'var(--color-ink-secondary)',
-                      background: 'var(--color-ascii-bg)',
-                      padding: '1.25rem',
-                      overflowX: 'hidden',
-                      whiteSpace: 'pre-wrap',
-                      wordBreak: 'break-word',
-                      // Show only first ~8 lines worth
-                      maxHeight: '11.5rem',
-                      overflowY: 'hidden',
-                    }}
-                  >
-                    {soul.filePreview}
-                  </pre>
 
-                  {/* Fade + ASCII redaction overlay */}
+                {/* Two-column: tree + content */}
+                <div className="flex" style={{ borderBottom: '1px solid var(--color-paper-border)' }}>
+
+                  {/* Left: file tree */}
                   <div
                     style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      height: '7rem',
-                      background: `linear-gradient(to bottom, transparent 0%, var(--color-ascii-bg) 55%)`,
-                      pointerEvents: 'none',
-                    }}
-                  />
-                  {/* Redaction bar */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      padding: '0.5rem 1.25rem 0.75rem',
-                      background: 'var(--color-ascii-bg)',
-                      borderTop: '1px solid var(--color-paper-border)',
+                      width: '11rem',
+                      flexShrink: 0,
+                      borderRight: '1px solid var(--color-paper-border)',
+                      background: 'var(--color-paper-dark)',
+                      padding: '0.75rem 0',
                     }}
                   >
+                    {/* Root folder label */}
                     <div
                       style={{
                         fontFamily: 'var(--font-mono)',
-                        fontSize: '0.6rem',
-                        color: 'var(--color-ink-faint)',
-                        letterSpacing: '0.12em',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                        marginBottom: '0.5rem',
-                        userSelect: 'none',
+                        fontSize: '0.62rem',
+                        color: 'var(--color-ink-muted)',
+                        letterSpacing: '0.06em',
+                        padding: '0 0.75rem 0.4rem',
+                        borderBottom: '1px solid var(--color-paper-border)',
+                        marginBottom: '0.4rem',
                       }}
                     >
-                      {'█'.repeat(3)}&nbsp;
-                      <span style={{ color: 'var(--color-accent)', letterSpacing: '0.2em' }}>
-                        [REDACTED — DOWNLOAD TO ACCESS FULL FILE]
-                      </span>
-                      &nbsp;{'█'.repeat(3)}
+                      📁 {soul.slug}/
                     </div>
-                    <button
-                      onClick={() => {
-                        const el = document.querySelector('[data-hire-btn]') as HTMLElement
-                        el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-                      }}
+                    {/* Files */}
+                    {(
+                      [
+                        { key: 'soul', label: 'SOUL.md', indent: 1 },
+                        { key: 'memory', label: 'MEMORY.md', indent: 1 },
+                        { key: null, label: 'README.md', indent: 1 },
+                        { key: null, label: 'skills/', indent: 1 },
+                        { key: 'skill', label: `${soul.slug}/SKILL.md`, indent: 2 },
+                      ] as { key: 'soul' | 'skill' | 'memory' | null; label: string; indent: number }[]
+                    ).map(({ key, label, indent }) => {
+                      const isActive = key !== null && activeFile === key
+                      const isClickable = key !== null
+                      return (
+                        <div
+                          key={label}
+                          onClick={() => { if (isClickable) setActiveFile(key!) }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            padding: `0.2rem ${0.5 + indent * 0.75}rem`,
+                            cursor: isClickable ? 'pointer' : 'default',
+                            background: isActive ? 'rgba(var(--color-accent-rgb, 180,120,60), 0.08)' : 'transparent',
+                            borderLeft: isActive ? '2px solid var(--color-accent)' : '2px solid transparent',
+                            transition: 'all 100ms',
+                          }}
+                          onMouseEnter={(e) => { if (isClickable && !isActive) (e.currentTarget as HTMLDivElement).style.background = 'var(--color-paper)' }}
+                          onMouseLeave={(e) => { if (isClickable && !isActive) (e.currentTarget as HTMLDivElement).style.background = 'transparent' }}
+                        >
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.62rem',
+                              color: isActive ? 'var(--color-accent)' : isClickable ? 'var(--color-ink-secondary)' : 'var(--color-ink-faint)',
+                              letterSpacing: '0.02em',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {indent === 2 ? '└ ' : '├ '}{label}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  {/* Right: preview pane */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    {/* Tab bar */}
+                    <div
+                      className="flex items-center"
                       style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.65rem',
-                        letterSpacing: '0.1em',
-                        padding: '0.3rem 0.75rem',
-                        background: 'transparent',
-                        color: 'var(--color-accent)',
-                        border: '1px solid var(--color-accent)',
-                        cursor: 'pointer',
-                        transition: 'all 150ms',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'var(--color-accent)'
-                        e.currentTarget.style.color = 'var(--color-paper)'
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'transparent'
-                        e.currentTarget.style.color = 'var(--color-accent)'
+                        borderBottom: '1px solid var(--color-paper-border)',
+                        background: 'var(--color-paper-dark)',
+                        padding: '0 0.75rem',
                       }}
                     >
-                      ↓ HIRE THIS SOUL TO UNLOCK
-                    </button>
+                      {(
+                        [
+                          { key: 'soul', label: 'SOUL.md' },
+                          { key: 'skill', label: 'SKILL.md' },
+                          { key: 'memory', label: 'MEMORY.md' },
+                        ] as { key: 'soul' | 'skill' | 'memory'; label: string }[]
+                      ).map(({ key, label }) => {
+                        const isActive = activeFile === key
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            onClick={() => setActiveFile(key)}
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.62rem',
+                              letterSpacing: '0.08em',
+                              padding: '0.4rem 0.6rem',
+                              background: 'transparent',
+                              border: 'none',
+                              borderBottom: isActive ? '2px solid var(--color-accent)' : '2px solid transparent',
+                              color: isActive ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                              cursor: 'pointer',
+                              transition: 'color 120ms',
+                              marginBottom: '-1px',
+                            }}
+                            onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--color-ink-muted)' }}
+                            onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--color-ink-faint)' }}
+                          >
+                            {label}
+                          </button>
+                        )
+                      })}
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.58rem',
+                          color: 'var(--color-ink-faint)',
+                          letterSpacing: '0.08em',
+                          marginLeft: 'auto',
+                          paddingRight: '0.25rem',
+                        }}
+                      >
+                        PREVIEW ONLY
+                      </span>
+                    </div>
+
+                    {/* File content + redaction overlay */}
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeFile}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.12 }}
+                        style={{ position: 'relative', overflow: 'hidden' }}
+                      >
+                        {(() => {
+                          const content =
+                            activeFile === 'soul' ? soulContent
+                            : activeFile === 'skill' ? skillContent
+                            : memoryContent
+                          if (!content) {
+                            return (
+                              <div
+                                style={{
+                                  fontFamily: 'var(--font-mono)',
+                                  fontSize: '0.72rem',
+                                  color: 'var(--color-ink-faint)',
+                                  background: 'var(--color-ascii-bg)',
+                                  padding: '2rem 1.25rem',
+                                  letterSpacing: '0.1em',
+                                  textAlign: 'center',
+                                }}
+                              >
+                                {'█'.repeat(3)}&nbsp;
+                                <span style={{ color: 'var(--color-accent)', letterSpacing: '0.2em' }}>
+                                  [REDACTED — HIRE THIS SOUL TO UNLOCK]
+                                </span>
+                                &nbsp;{'█'.repeat(3)}
+                              </div>
+                            )
+                          }
+                          return (
+                            <>
+                              <pre
+                                style={{
+                                  fontFamily: 'var(--font-mono)',
+                                  fontSize: '0.75rem',
+                                  lineHeight: 1.75,
+                                  color: 'var(--color-ink-secondary)',
+                                  background: 'var(--color-ascii-bg)',
+                                  padding: '1.25rem',
+                                  overflowX: 'hidden',
+                                  whiteSpace: 'pre-wrap',
+                                  wordBreak: 'break-word',
+                                  maxHeight: '11.5rem',
+                                  overflowY: 'hidden',
+                                  margin: 0,
+                                }}
+                              >
+                                {content}
+                              </pre>
+
+                              {/* Fade overlay */}
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: '7rem',
+                                  background: `linear-gradient(to bottom, transparent 0%, var(--color-ascii-bg) 55%)`,
+                                  pointerEvents: 'none',
+                                }}
+                              />
+                              {/* Redaction bar */}
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  padding: '0.5rem 1.25rem 0.75rem',
+                                  background: 'var(--color-ascii-bg)',
+                                  borderTop: '1px solid var(--color-paper-border)',
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.6rem',
+                                    color: 'var(--color-ink-faint)',
+                                    letterSpacing: '0.12em',
+                                    overflow: 'hidden',
+                                    whiteSpace: 'nowrap',
+                                    marginBottom: '0.5rem',
+                                    userSelect: 'none',
+                                  }}
+                                >
+                                  {'█'.repeat(3)}&nbsp;
+                                  <span style={{ color: 'var(--color-accent)', letterSpacing: '0.2em' }}>
+                                    [REDACTED — DOWNLOAD TO ACCESS FULL FILE]
+                                  </span>
+                                  &nbsp;{'█'.repeat(3)}
+                                </div>
+                                <button
+                                  onClick={() => {
+                                    const el = document.querySelector('[data-hire-btn]') as HTMLElement
+                                    el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                                  }}
+                                  style={{
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '0.65rem',
+                                    letterSpacing: '0.1em',
+                                    padding: '0.3rem 0.75rem',
+                                    background: 'transparent',
+                                    color: 'var(--color-accent)',
+                                    border: '1px solid var(--color-accent)',
+                                    cursor: 'pointer',
+                                    transition: 'all 150ms',
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = 'var(--color-accent)'
+                                    e.currentTarget.style.color = 'var(--color-paper)'
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = 'transparent'
+                                    e.currentTarget.style.color = 'var(--color-accent)'
+                                  }}
+                                >
+                                  ↓ HIRE THIS SOUL TO UNLOCK
+                                </button>
+                              </div>
+                            </>
+                          )
+                        })()}
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
                 </div>
-                {/* File list */}
+
+                {/* Footer: file list with active highlight */}
                 <div
                   className="flex items-center gap-4 px-4 py-2"
-                  style={{ borderTop: '1px solid var(--color-paper-border)', background: 'var(--color-paper-dark)' }}
+                  style={{ background: 'var(--color-paper-dark)' }}
                 >
-                  {['SOUL.md', 'SKILL.md', 'MEMORY.md'].map((f) => (
-                    <span key={f} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--color-ink-muted)', letterSpacing: '0.04em' }}>
-                      ▸ {f}
-                    </span>
-                  ))}
+                  {(['soul', 'skill', 'memory'] as const).map((key) => {
+                    const label = key === 'soul' ? 'SOUL.md' : key === 'skill' ? 'SKILL.md' : 'MEMORY.md'
+                    const isActive = activeFile === key
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setActiveFile(key)}
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.62rem',
+                          color: isActive ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                          letterSpacing: '0.04em',
+                          background: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          padding: 0,
+                        }}
+                      >
+                        ▸ {label}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -612,23 +875,6 @@ export default function SoulDetailPage() {
                 as a .zip — drop into Cursor, Claude, or GPT
               </p>
 
-              {/* Sources */}
-              <div style={{ border: '1px solid var(--color-paper-border)', background: 'var(--color-paper)' }}>
-                <div className="px-4 py-2" style={{ borderBottom: '1px solid var(--color-paper-border)', background: 'var(--color-paper-dark)' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.1em', color: 'var(--color-ink-muted)' }}>
-                    SOURCES
-                  </span>
-                </div>
-                <div className="px-4 py-3 space-y-2">
-                  {soul.contentSources.map((src) => (
-                    <div key={src} className="flex items-start gap-2">
-                      <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-accent)', fontSize: '0.65rem', marginTop: '0.15rem', flexShrink: 0 }}>▸</span>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'var(--color-ink-secondary)', lineHeight: 1.55 }}>{src}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               {/* Tags */}
               <div>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.1em', color: 'var(--color-ink-muted)', display: 'block', marginBottom: '0.5rem' }}>
@@ -650,6 +896,26 @@ export default function SoulDetailPage() {
                     >
                       #{tag}
                     </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Version changelog */}
+              <VersionTimeline changelog={soul.changelog} />
+
+              {/* Sources */}
+              <div style={{ border: '1px solid var(--color-paper-border)', background: 'var(--color-paper)' }}>
+                <div className="px-4 py-2" style={{ borderBottom: '1px solid var(--color-paper-border)', background: 'var(--color-paper-dark)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.1em', color: 'var(--color-ink-muted)' }}>
+                    SOURCES
+                  </span>
+                </div>
+                <div className="px-4 py-3 space-y-2">
+                  {soul.contentSources.map((src) => (
+                    <div key={src} className="flex items-start gap-2">
+                      <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-accent)', fontSize: '0.65rem', marginTop: '0.15rem', flexShrink: 0 }}>▸</span>
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem', color: 'var(--color-ink-secondary)', lineHeight: 1.55 }}>{src}</span>
+                    </div>
                   ))}
                 </div>
               </div>

@@ -1,3 +1,9 @@
+export interface VersionEntry {
+  version: string
+  date: string
+  summary: string
+}
+
 export type SoulCategory =
   | 'AI & Engineering'
   | 'Startup & Investing'
@@ -45,6 +51,11 @@ export interface Soul extends SoulMeta {
   soulMd?: string
   skillMd?: string
   memoryMd?: string
+  // 预览片段 fallback（无 bundle 时用）
+  skillPreview?: string
+  memoryPreview?: string
+  // 版本变更记录
+  changelog?: VersionEntry[]
 }
 
 export interface FAQItem {
