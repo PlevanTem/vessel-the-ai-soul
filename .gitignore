@@ -1,0 +1,21 @@
+# Dependencies
+outputs/**/node_modules/
+
+# Build output
+outputs/**/dist/
+
+# Env files — NEVER commit these
+outputs/**/.env
+outputs/**/.env.local
+outputs/**/.env.*
+
+# TypeScript build cache
+outputs/**/tsconfig.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db

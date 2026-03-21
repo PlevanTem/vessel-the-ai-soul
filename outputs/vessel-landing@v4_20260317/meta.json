@@ -1,0 +1,18 @@
+{
+  "case_id": "vessel-landing",
+  "pipeline_version": "v4",
+  "generated_date": "20260317",
+  "source_type": "query",
+  "source_file": "reports/soul-distillation-product-strategy-2026-03-17-v1.md",
+  "input_summary": "根据 Vessel 产品战略文档（Soul Distillation 人格蒸馏服务）生成品牌 Landing Page，面向全球知识型创作者和专业人士",
+  "domain": "ai-identity-saas-landing",
+  "selected_stack": "react+typescript+vite",
+  "stack_language": "typescript",
+  "delivery_mode": "multi-file",
+  "uses_visual_effects": true,
+  "effect_type": "webgl2-flow-field",
+  "generative_modes": ["webgl2-particle-flow-field", "canvas2d-success-particles", "css-grain-texture"],
+  "component_library_used": ["framer-motion"],
+  "interaction_completeness": "full",
+  "created_at": "2026-03-17T13:08:00Z"
+}
