@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import SoulGrid from '../components/SoulGrid'
+import WaitlistSection from '../components/WaitlistSection'
 
 // ASCII art block for hero decoration
 const ASCII_VESSEL = `
@@ -129,6 +130,9 @@ export default function HomePage() {
 
       {/* Grid */}
       <SoulGrid />
+
+      {/* Waitlist */}
+      <WaitlistSection />
     </>
   )
 }

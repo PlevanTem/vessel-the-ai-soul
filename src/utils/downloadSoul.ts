@@ -1,5 +1,6 @@
 import JSZip from 'jszip'
 import type { Soul } from '../types'
+import { supabase } from '../lib/supabase'
 
 // ── Fallback generators (used when real distilled files aren't available) ──
 
@@ -201,4 +202,12 @@ export async function downloadSoulZip(soul: Soul): Promise<void> {
   a.click()
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
+
+  // 记录下载日志（fire-and-forget，不阻塞下载流程）
+  supabase.auth.getUser().then(({ data }) => {
+    supabase.from('download_logs').insert({
+      user_id: data.user?.id ?? null,
+      soul_slug: soul.slug,
+    }).then(() => {})
+  })
 }
