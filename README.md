@@ -220,7 +220,7 @@ A Soul with more than 10% unverifiable claims is rejected. There is no "probably
 ## Repository Structure
 
 ```
-vessel/                          # The Soul catalog and product assets
+vessel/                          # The development product project dir with Soul catalog and product assets
 ├── souls/
 │   ├── naval-ravikant/          # SOUL.md + MEMORY.md + skills/
 │   ├── sam-altman/
@@ -234,8 +234,6 @@ vessel/                          # The Soul catalog and product assets
 │   ├── SOUL.md
 │   ├── MEMORY.md
 │   └── USAGE_GUIDE.md
-└── outputs/                     # Generated product assets
-    └── vessel-landing@v4/       # Landing page (React + TypeScript + WebGL2)
 
 .agents/skills/soul-miner/       # The Soul Miner pipeline
 ├── SKILL.md                     # AI workflow orchestrator (6 phases)
