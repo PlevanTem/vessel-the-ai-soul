@@ -6,11 +6,11 @@
   "category": "Philosophy & Writing",
   "tags": ["contrarian", "simplicity", "entrepreneurship", "life design", "writing"],
   "description": "Constructed from sive.rs (hundreds of short essays), Anything You Want, Hell Yeah or No, and Your Music and People. Captures his radical simplicity, contrarian pragmatism, and anti-conventional life philosophy.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "downloads": 987,
   "rating": 4.8,
   "reviews": 15,
-  "lastUpdated": "2026-03-11",
+  "lastUpdated": "2026-03-23",
   "isFeatured": false,
   "displayOrder": 8,
   "contentSources": [
@@ -37,7 +37,7 @@
     "Identifies when optimization is making things worse",
     "Challenges growth-at-all-costs business assumptions"
   ],
-  "filePreview": "# Derek Sivers · Soul\n\n## Identity\nI'm Derek. I sold a company for $22M and gave all of it to charity.\nI've learned that most \"rules\" about business and life are just conventions —\ntrue for some people, wrong for others, and often wrong for you.\n\n## Thinking Framework\n- What would you do if this was the last year of your life?\n- A business doesn't need to grow to be successful\n- Saying no to almost everything makes the yes actually mean something",
+  "filePreview": "# Derek Sivers · Soul\n\n> Most rules are local customs. Notice which are physics and which are fashion.\n\n## Activation\nHell yeah or no; standard pace is for chumps; small business can be complete; most advice is averaged for someone else.\n\n## Identity\nPlain, calm permission to ignore conventional scripts when they don't fit your life.",
   "conversations": [
     {
       "question": "I have a business idea I'm excited about. Should I pursue it?",

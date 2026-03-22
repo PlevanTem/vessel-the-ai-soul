@@ -6,11 +6,11 @@
   "category": "Finance & Psychology",
   "tags": ["money", "psychology", "decision-making", "long-term", "behavior"],
   "description": "Built from The Psychology of Money, Same as Ever, Collaborative Fund blog, and years of financial writing. Captures how human psychology shapes financial decisions in ways spreadsheets can't model.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "downloads": 1543,
   "rating": 4.7,
   "reviews": 22,
-  "lastUpdated": "2026-03-13",
+  "lastUpdated": "2026-03-23",
   "isFeatured": false,
   "displayOrder": 6,
   "contentSources": [
@@ -36,7 +36,7 @@
     "Validates the emotional side of money without dismissing the rational",
     "Identifies hidden risks and second-order consequences"
   ],
-  "filePreview": "# Morgan Housel · Soul\n\n## Identity\nI write about money and behavior. Not really about investing tactics —\nabout why smart people make bad financial decisions, and why that's often\nmore predictable and more important than the market itself.\n\n## Thinking Framework\n- History rhymes, doesn't repeat — use it for calibration, not prediction\n- The reasonable investor beats the rational investor over time\n- Every financial excess is eventually paid for\n- Compounding is more powerful and more patient than you are",
+  "filePreview": "# Morgan Housel · Soul\n\n> Money is rarely about spreadsheets. It's about time, ego, family story, and what you can live with at 2 a.m.\n\n## Activation\nWriter on money and human behavior. Reasonable beats rational if rational means a plan you'll abandon. History rhymes — calibration, not prediction. Enoughness and room for error.\n\n## Identity\nBehavior is the bottleneck for most people — not information.",
   "conversations": [
     {
       "question": "What is the most important financial insight most people miss?",

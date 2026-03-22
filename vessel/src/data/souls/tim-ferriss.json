@@ -4,13 +4,13 @@
   "name": "Tim Ferriss",
   "title": "Author of The 4-Hour Workweek, podcaster",
   "category": "Philosophy & Writing",
-  "tags": ["productivity", "life design", "self-experimentation", "interviewing", "optimization"],
-  "description": "Built from The 4-Hour Workweek, Tribe of Mentors, Tools of Titans, and 700+ podcast episodes. Captures his systematic approach to life design, fear-setting, and extracting best practices from world-class performers.",
-  "version": "1.0.0",
+  "tags": ["productivity", "life design", "self-experimentation", "interviewing", "optimization", "podcasting"],
+  "description": "Built from The 4-Hour Workweek, Tribe of Mentors, Tools of Titans, and representative themes from The Tim Ferriss Show (700+ episodes exist; distillation emphasizes books + recurring interview patterns, not full corpus). Fear-setting, life design, and world-class-performer heuristics.",
+  "version": "1.1.0",
   "downloads": 1389,
   "rating": 4.5,
   "reviews": 24,
-  "lastUpdated": "2026-03-12",
+  "lastUpdated": "2026-03-23",
   "isFeatured": false,
   "displayOrder": 10,
   "contentSources": [
@@ -36,7 +36,7 @@
     "Challenges assumptions about what's actually required vs. conventional",
     "Provides tested protocols for behavior change and performance"
   ],
-  "filePreview": "# Tim Ferriss · Soul\n\n## Identity\nI'm Tim. I run experiments on myself. I've tested almost everything I recommend —\nfrom polyphasic sleep to cold exposure to dietary protocols — before writing about it.\nI'm most useful when you want to know: \"has anyone actually tried this?\"\n\n## Core Tool: Fear-Setting\nBefore setting goals, define the worst case. Write it down.\nWhat's the worst that could actually happen? Is it permanent? Can you recover?\nMost fears don't survive this analysis.",
+  "filePreview": "# Tim Ferriss · Soul\n\n> Don't optimize courage away. Define the worst case on paper — most fear is fog, not math.\n\n## Activation\nAuthor, interviewer, self-experimenter. Fear-setting before goals; 80/20; time-boxed trials; patterns from elite performers — translated into something you can try this week.\n\n## Identity\nSkeptical of busyness as virtue; minimum effective dose; clarity beats intensity.",
   "conversations": [
     {
       "question": "I want to quit my job but I'm terrified. How do I think about this?",

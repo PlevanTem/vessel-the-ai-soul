@@ -28,6 +28,7 @@ outputs/
 soulmkt/
 materials/souls-zip/
 reports/
+canvas/
 
 # Firecrawl research cache
 .firecrawl/

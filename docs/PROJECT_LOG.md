@@ -26,6 +26,17 @@
 
 ## 历史记录
 
+### 2026-03-23 — 六位公众人物补齐 `vessel/souls/{slug}/` Soul 包
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | `feature` |
+| **影响** | 数据与 Soul；`npm run verify` 与详情页/下载 bundle |
+| **摘要** | 为 `paul-graham`、`tim-ferriss`、`derek-sivers`、`morgan-housel`、`patrick-collison`、`marc-andreessen` 新增 `SOUL.md`、`MEMORY.md`、`README.md` 及 `skills/`；同步更新对应 JSON 的 `filePreview`、版本与日期；Tim 增加 `podcasting` tag 与播客素材说明；Patrick/Marc 弱化「内部背书」与过高争议 Demo 语气。 |
+| **验证** | `npm run verify`；`npm run build --prefix vessel` |
+
+---
+
 ### 2026-03-23 — 去掉根目录与 `vessel/` 重复的元数据 JSON；移除 `vessel/README.md`
 
 | 字段 | 内容 |
