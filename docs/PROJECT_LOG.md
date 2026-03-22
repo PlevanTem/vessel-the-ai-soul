@@ -26,6 +26,47 @@
 
 ## 历史记录
 
+### 2026-03-22 — FILE EXPLORER：预览区 `<pre>` 可视高度与滚动
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | `feature`（UX） |
+| **影响** | 用户可见（Soul 详情 · FILE EXPLORER） |
+| **摘要** | 右侧 YAML/技能预览可见区域过小，长文案（如 Naval skill 描述）展示不全。 |
+| **根因** | `<pre>` 使用固定 **`maxHeight: 11.5rem`**，裁切过多。 |
+| **改动** | **`vessel/src/pages/SoulDetailPage.tsx`**：`maxHeight` 改为 **`min(34rem, 58vh)`**；**`overflowY: auto`**；底部渐变高度约 **8.5rem** 与更高预览区协调。 |
+| **验证** | 本地刷新详情页 FILE EXPLORER。 |
+| **备注** | 会话 [预览与多 skill](02b5896d-c7d1-4776-8dfe-e5f3add19adb) |
+
+---
+
+### 2026-03-22 — Soul 详情：多 skill 子目录、侧栏树与 Zip 打包（Ryo Lu 等）
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | `bugfix` + `feature` |
+| **影响** | 用户可见；下载包完整性 |
+| **摘要** | 侧栏未按真实目录展示多个 skill；`systems-design`、`soulful-ai-workflow` 等子 skill 未进 bundle / Zip。 |
+| **根因** | **`bundledSouls.ts`** 仅保留 **`skills/{slug}/SKILL.md`**（与 soul slug 同名）；**`SoulDetailPage`** 文件树写死单行 skill；**`downloadSoul.ts`** 未写入全部 **`skills/*/`**。 |
+| **改动** | **`vessel/src/utils/bundledSouls.ts`**：`glob` 收集 **`skills/*/**/SKILL.md`**，同名主 skill 优先、其余按文件夹名排序；导出 **`getBundledSoulSkills(slug)`**；**`skillMd`** 仍为主 skill 兼容旧逻辑。**`SoulDetailPage.tsx`**：侧栏树列出多 skill、**`activeSkillFolder`**、Tab/预览联动；Hooks 顺序符合 React 规则。**`vessel/src/utils/downloadSoul.ts`**：Zip 含 **`skills/{folder}/SKILL.md`**。 |
+| **验证** | `npm run verify`；`vessel` 下 **`npm run build`**；Ryo Lu 详情可见 **ryo-lu / systems-design / soulful-ai-workflow**。 |
+| **备注** | 会话 [预览与多 skill](02b5896d-c7d1-4776-8dfe-e5f3add19adb) |
+
+---
+
+### 2026-03-22 — 本地开发备忘：`vessel` 预览与 PowerShell
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | `docs`（备忘） |
+| **影响** | 仅本地开发 |
+| **摘要** | `@vessel` 启动预览时，多端口占用下 Vite 可能落在 **5178** 等端口。 |
+| **改动** | 无代码；日常用 **`npm run dev`**（`vessel`）；**`preview`** 需先 **`build`**。PowerShell 避免 **`cd … && …`**，用 **`;`** 或分行。 |
+| **验证** | 本机 `http://localhost:5178/`（视占用而定）。 |
+| **备注** | 会话 [预览与多 skill](02b5896d-c7d1-4776-8dfe-e5f3add19adb) |
+
+---
+
 ### 2026-03-22 — 将 `vessel/` 从 submodule gitlink 改为普通目录（修复 Vercel 空目录）
 
 | 字段 | 内容 |
