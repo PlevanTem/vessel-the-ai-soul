@@ -27,3 +27,7 @@ alwaysApply: true
 
 - 在仓库根执行：`npm run verify`（或 `npm run verify:souls --prefix vessel`）。
 - 完整说明见 **`docs/PROJECT_LAYOUT.md`**。
+
+## 工程日志
+
+- 修复 bug、部署失败、目录或 Soul 数据相关变更合并后，在 **`docs/PROJECT_LOG.md`** 顶部（或 `[未发布]`）**追加一条**记录（类型、摘要、根因、改动、验证）。

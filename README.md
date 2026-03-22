@@ -225,14 +225,16 @@ A Soul with more than 10% unverifiable claims is rejected. There is no "probably
 ## Repository Structure
 
 **Single source of truth for the web app and Soul packages: `vessel/`.**  
-The repo root holds docs, agent skills, and thin npm scripts — **no duplicate `src/` or `souls/` at the root** (see [docs/PROJECT_LAYOUT.md](docs/PROJECT_LAYOUT.md)).
+The repo root holds docs, agent skills, and thin npm scripts — **no duplicate `src/` or `souls/` at the root** (see [docs/PROJECT_LAYOUT.md](docs/PROJECT_LAYOUT.md)). **Change log / incident notes:** [docs/PROJECT_LOG.md](docs/PROJECT_LOG.md).
 
 ```
 .                                # Workspace root
 ├── package.json                 # npm scripts only → delegate to vessel/ (no duplicate deps)
 ├── vercel.json                  # If deploy root = repo: build output from vessel/dist
 ├── docs/
-│   └── PROJECT_LAYOUT.md        # Canonical paths, Soul JSON ↔ Markdown rules, verify
+│   ├── PROJECT_LAYOUT.md        # Canonical paths, Soul JSON ↔ Markdown rules, verify
+│   ├── PROJECT_LOG.md           # Bug / fix / update log (append on each relevant merge)
+│   └── DEPLOY_VERCEL.md         # Vercel root dir & overrides
 ├── scripts/
 │   └── verify-soul-integrity.mjs
 ├── vessel/                      # ★ Landing + Soul catalog (React / Vite app)
