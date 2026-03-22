@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { souls } from '../data/souls'
 import { downloadSoulZip } from '../utils/downloadSoul'
-import { getBundledSoulPackage } from '../utils/bundledSouls'
+import { getBundledSoulPackage, getBundledSoulSkills } from '../utils/bundledSouls'
 import { useAuth } from '../contexts/AuthContext'
 import type { VersionEntry } from '../types'
 
@@ -143,11 +143,9 @@ export default function SoulDetailPage() {
   const [downloading, setDownloading] = useState(false)
   const [downloadDone, setDownloadDone] = useState(false)
   const [activeFile, setActiveFile] = useState<'soul' | 'skill' | 'memory'>('soul')
+  const [activeSkillFolder, setActiveSkillFolder] = useState('')
 
   const bundled = soul ? getBundledSoulPackage(soul.slug) : {}
-  const soulContent = bundled.soulMd ?? soul?.filePreview ?? ''
-  const skillContent = bundled.skillMd ?? (soul?.skillPreview ?? null)
-  const memoryContent = bundled.memoryMd ?? (soul?.memoryPreview ?? null)
 
   const handleConvSwitch = (i: number) => {
     setActiveConvIndex(i)
@@ -164,6 +162,13 @@ export default function SoulDetailPage() {
     ? souls.filter((s) => s.category === soul.category && s.id !== soul.id).slice(0, 3)
     : []
 
+  useEffect(() => {
+    if (!soul) return
+    const sk = getBundledSoulSkills(soul.slug)
+    setActiveSkillFolder(sk[0]?.folder ?? soul.slug)
+    setActiveFile('soul')
+  }, [soul])
+
   if (!soul) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
@@ -179,6 +184,45 @@ export default function SoulDetailPage() {
       </div>
     )
   }
+
+  const soulContent = bundled.soulMd ?? soul.filePreview ?? ''
+  const memoryContent = bundled.memoryMd ?? soul.memoryPreview ?? null
+  const bundledSkills = getBundledSoulSkills(soul.slug)
+  const fallbackSkillBody = bundled.skillMd ?? soul.skillPreview ?? null
+  const skillEntries: { folder: string; content: string | null }[] =
+    bundledSkills.length > 0
+      ? bundledSkills.map((s) => ({ folder: s.folder, content: s.content }))
+      : [{ folder: soul.slug, content: fallbackSkillBody }]
+  const skillFolders = skillEntries.map((e) => e.folder)
+  const skillFolderForPane = activeSkillFolder || skillFolders[0] || soul.slug
+  const skillPaneContent =
+    activeFile !== 'skill'
+      ? null
+      : (skillEntries.find((e) => e.folder === skillFolderForPane)?.content
+          ?? skillEntries[0]?.content
+          ?? null)
+
+  const explorerTreeRows: {
+    reactKey: string
+    fileKey: 'soul' | 'memory' | 'skill' | null
+    skillFolder?: string
+    label: string
+    indent: number
+    branch: string
+  }[] = [
+    { reactKey: 'soul', fileKey: 'soul', label: 'SOUL.md', indent: 1, branch: '├ ' },
+    { reactKey: 'memory', fileKey: 'memory', label: 'MEMORY.md', indent: 1, branch: '├ ' },
+    { reactKey: 'readme', fileKey: null, label: 'README.md', indent: 1, branch: '├ ' },
+    { reactKey: 'skills/', fileKey: null, label: 'skills/', indent: 1, branch: '├ ' },
+    ...skillFolders.map((folder, i, arr) => ({
+      reactKey: `skill-${folder}`,
+      fileKey: 'skill' as const,
+      skillFolder: folder,
+      label: `${folder}/SKILL.md`,
+      indent: 2,
+      branch: i === arr.length - 1 ? '└ ' : '├ ',
+    })),
+  ]
 
   const initials = soul.name.split(' ').map((n) => n[0]).join('').slice(0, 2)
   const monoLabel = (s: string) => s.replace(/\s*&\s*/g, '+').replace(/\s+/g, '_').toUpperCase()
@@ -407,21 +451,20 @@ export default function SoulDetailPage() {
                       📁 {soul.slug}/
                     </div>
                     {/* Files */}
-                    {(
-                      [
-                        { key: 'soul', label: 'SOUL.md', indent: 1 },
-                        { key: 'memory', label: 'MEMORY.md', indent: 1 },
-                        { key: null, label: 'README.md', indent: 1 },
-                        { key: null, label: 'skills/', indent: 1 },
-                        { key: 'skill', label: `${soul.slug}/SKILL.md`, indent: 2 },
-                      ] as { key: 'soul' | 'skill' | 'memory' | null; label: string; indent: number }[]
-                    ).map(({ key, label, indent }) => {
-                      const isActive = key !== null && activeFile === key
-                      const isClickable = key !== null
+                    {explorerTreeRows.map(({ reactKey, fileKey, skillFolder, label, indent, branch }) => {
+                      const isActive =
+                        fileKey !== null
+                        && activeFile === fileKey
+                        && (fileKey !== 'skill' || skillFolder === skillFolderForPane)
+                      const isClickable = fileKey !== null
                       return (
                         <div
-                          key={label}
-                          onClick={() => { if (isClickable) setActiveFile(key!) }}
+                          key={reactKey}
+                          onClick={() => {
+                            if (!isClickable || !fileKey) return
+                            setActiveFile(fileKey)
+                            if (fileKey === 'skill' && skillFolder) setActiveSkillFolder(skillFolder)
+                          }}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -446,7 +489,7 @@ export default function SoulDetailPage() {
                               textOverflow: 'ellipsis',
                             }}
                           >
-                            {indent === 2 ? '└ ' : '├ '}{label}
+                            {branch}{label}
                           </span>
                         </div>
                       )
@@ -457,46 +500,114 @@ export default function SoulDetailPage() {
                   <div style={{ flex: 1, minWidth: 0 }}>
                     {/* Tab bar */}
                     <div
-                      className="flex items-center"
+                      className="flex items-center flex-wrap gap-x-0.5"
                       style={{
                         borderBottom: '1px solid var(--color-paper-border)',
                         background: 'var(--color-paper-dark)',
                         padding: '0 0.75rem',
                       }}
                     >
-                      {(
-                        [
-                          { key: 'soul', label: 'SOUL.md' },
-                          { key: 'skill', label: 'SKILL.md' },
-                          { key: 'memory', label: 'MEMORY.md' },
-                        ] as { key: 'soul' | 'skill' | 'memory'; label: string }[]
-                      ).map(({ key, label }) => {
-                        const isActive = activeFile === key
-                        return (
-                          <button
-                            key={key}
-                            type="button"
-                            onClick={() => setActiveFile(key)}
-                            style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.62rem',
-                              letterSpacing: '0.08em',
-                              padding: '0.4rem 0.6rem',
-                              background: 'transparent',
-                              border: 'none',
-                              borderBottom: isActive ? '2px solid var(--color-accent)' : '2px solid transparent',
-                              color: isActive ? 'var(--color-accent)' : 'var(--color-ink-faint)',
-                              cursor: 'pointer',
-                              transition: 'color 120ms',
-                              marginBottom: '-1px',
-                            }}
-                            onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--color-ink-muted)' }}
-                            onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--color-ink-faint)' }}
-                          >
-                            {label}
-                          </button>
-                        )
-                      })}
+                      <button
+                        type="button"
+                        onClick={() => setActiveFile('soul')}
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.62rem',
+                          letterSpacing: '0.08em',
+                          padding: '0.4rem 0.6rem',
+                          background: 'transparent',
+                          border: 'none',
+                          borderBottom: activeFile === 'soul' ? '2px solid var(--color-accent)' : '2px solid transparent',
+                          color: activeFile === 'soul' ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                          cursor: 'pointer',
+                          transition: 'color 120ms',
+                          marginBottom: '-1px',
+                        }}
+                        onMouseEnter={(e) => { if (activeFile !== 'soul') e.currentTarget.style.color = 'var(--color-ink-muted)' }}
+                        onMouseLeave={(e) => { if (activeFile !== 'soul') e.currentTarget.style.color = 'var(--color-ink-faint)' }}
+                      >
+                        SOUL.md
+                      </button>
+                      {bundledSkills.length <= 1 ? (
+                        <button
+                          type="button"
+                          onClick={() => setActiveFile('skill')}
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.62rem',
+                            letterSpacing: '0.08em',
+                            padding: '0.4rem 0.6rem',
+                            background: 'transparent',
+                            border: 'none',
+                            borderBottom: activeFile === 'skill' ? '2px solid var(--color-accent)' : '2px solid transparent',
+                            color: activeFile === 'skill' ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                            cursor: 'pointer',
+                            transition: 'color 120ms',
+                            marginBottom: '-1px',
+                          }}
+                          onMouseEnter={(e) => { if (activeFile !== 'skill') e.currentTarget.style.color = 'var(--color-ink-muted)' }}
+                          onMouseLeave={(e) => { if (activeFile !== 'skill') e.currentTarget.style.color = 'var(--color-ink-faint)' }}
+                        >
+                          SKILL.md
+                        </button>
+                      ) : (
+                        bundledSkills.map((s) => {
+                          const isSkillTab = activeFile === 'skill' && s.folder === skillFolderForPane
+                          return (
+                            <button
+                              key={s.folder}
+                              type="button"
+                              onClick={() => {
+                                setActiveFile('skill')
+                                setActiveSkillFolder(s.folder)
+                              }}
+                              style={{
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.58rem',
+                                letterSpacing: '0.06em',
+                                padding: '0.4rem 0.45rem',
+                                background: 'transparent',
+                                border: 'none',
+                                borderBottom: isSkillTab ? '2px solid var(--color-accent)' : '2px solid transparent',
+                                color: isSkillTab ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                                cursor: 'pointer',
+                                transition: 'color 120ms',
+                                marginBottom: '-1px',
+                                maxWidth: '7rem',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}
+                              title={`skills/${s.folder}/SKILL.md`}
+                              onMouseEnter={(e) => { if (!isSkillTab) e.currentTarget.style.color = 'var(--color-ink-muted)' }}
+                              onMouseLeave={(e) => { if (!isSkillTab) e.currentTarget.style.color = 'var(--color-ink-faint)' }}
+                            >
+                              {s.folder}
+                            </button>
+                          )
+                        })
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setActiveFile('memory')}
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.62rem',
+                          letterSpacing: '0.08em',
+                          padding: '0.4rem 0.6rem',
+                          background: 'transparent',
+                          border: 'none',
+                          borderBottom: activeFile === 'memory' ? '2px solid var(--color-accent)' : '2px solid transparent',
+                          color: activeFile === 'memory' ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                          cursor: 'pointer',
+                          transition: 'color 120ms',
+                          marginBottom: '-1px',
+                        }}
+                        onMouseEnter={(e) => { if (activeFile !== 'memory') e.currentTarget.style.color = 'var(--color-ink-muted)' }}
+                        onMouseLeave={(e) => { if (activeFile !== 'memory') e.currentTarget.style.color = 'var(--color-ink-faint)' }}
+                      >
+                        MEMORY.md
+                      </button>
                       <span
                         style={{
                           fontFamily: 'var(--font-mono)',
@@ -514,7 +625,7 @@ export default function SoulDetailPage() {
                     {/* File content + redaction overlay */}
                     <AnimatePresence mode="wait">
                       <motion.div
-                        key={activeFile}
+                        key={activeFile === 'skill' ? `skill:${skillFolderForPane}` : activeFile}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -524,7 +635,7 @@ export default function SoulDetailPage() {
                         {(() => {
                           const content =
                             activeFile === 'soul' ? soulContent
-                            : activeFile === 'skill' ? skillContent
+                            : activeFile === 'skill' ? skillPaneContent
                             : memoryContent
                           if (!content) {
                             return (
@@ -560,8 +671,8 @@ export default function SoulDetailPage() {
                                   overflowX: 'hidden',
                                   whiteSpace: 'pre-wrap',
                                   wordBreak: 'break-word',
-                                  maxHeight: '11.5rem',
-                                  overflowY: 'hidden',
+                                  maxHeight: 'min(34rem, 58vh)',
+                                  overflowY: 'auto',
                                   margin: 0,
                                 }}
                               >
@@ -575,8 +686,8 @@ export default function SoulDetailPage() {
                                   bottom: 0,
                                   left: 0,
                                   right: 0,
-                                  height: '7rem',
-                                  background: `linear-gradient(to bottom, transparent 0%, var(--color-ascii-bg) 55%)`,
+                                  height: '8.5rem',
+                                  background: `linear-gradient(to bottom, transparent 0%, var(--color-ascii-bg) 50%)`,
                                   pointerEvents: 'none',
                                 }}
                               />
@@ -648,32 +759,90 @@ export default function SoulDetailPage() {
 
                 {/* Footer: file list with active highlight */}
                 <div
-                  className="flex items-center gap-4 px-4 py-2"
+                  className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2"
                   style={{ background: 'var(--color-paper-dark)' }}
                 >
-                  {(['soul', 'skill', 'memory'] as const).map((key) => {
-                    const label = key === 'soul' ? 'SOUL.md' : key === 'skill' ? 'SKILL.md' : 'MEMORY.md'
-                    const isActive = activeFile === key
-                    return (
-                      <button
-                        key={key}
-                        type="button"
-                        onClick={() => setActiveFile(key)}
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.62rem',
-                          color: isActive ? 'var(--color-accent)' : 'var(--color-ink-faint)',
-                          letterSpacing: '0.04em',
-                          background: 'transparent',
-                          border: 'none',
-                          cursor: 'pointer',
-                          padding: 0,
-                        }}
-                      >
-                        ▸ {label}
-                      </button>
-                    )
-                  })}
+                  <button
+                    type="button"
+                    onClick={() => setActiveFile('soul')}
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.62rem',
+                      color: activeFile === 'soul' ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                      letterSpacing: '0.04em',
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
+                  >
+                    ▸ SOUL.md
+                  </button>
+                  {bundledSkills.length <= 1 ? (
+                    <button
+                      type="button"
+                      onClick={() => setActiveFile('skill')}
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.62rem',
+                        color: activeFile === 'skill' ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                        letterSpacing: '0.04em',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                      }}
+                    >
+                      ▸ SKILL.md
+                    </button>
+                  ) : (
+                    bundledSkills.map((s) => {
+                      const on = activeFile === 'skill' && s.folder === skillFolderForPane
+                      return (
+                        <button
+                          key={s.folder}
+                          type="button"
+                          onClick={() => {
+                            setActiveFile('skill')
+                            setActiveSkillFolder(s.folder)
+                          }}
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.62rem',
+                            color: on ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                            letterSpacing: '0.04em',
+                            background: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: 0,
+                            maxWidth: '10rem',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                          title={`skills/${s.folder}/SKILL.md`}
+                        >
+                          ▸ {s.folder}/SKILL
+                        </button>
+                      )
+                    })
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setActiveFile('memory')}
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.62rem',
+                      color: activeFile === 'memory' ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                      letterSpacing: '0.04em',
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
+                  >
+                    ▸ MEMORY.md
+                  </button>
                 </div>
               </div>
             </div>

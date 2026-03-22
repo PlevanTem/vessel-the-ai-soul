@@ -21,7 +21,7 @@ const readmeMdGlob = import.meta.glob('../../souls/*/README.md', {
   import: 'default',
 }) as Record<string, string>
 
-/** Persona skill: souls/{slug}/skills/{slug}/SKILL.md */
+/** Every skill: souls/{slug}/skills/{folder}/SKILL.md */
 const personaSkillGlob = import.meta.glob('../../souls/*/skills/*/SKILL.md', {
   eager: true,
   query: '?raw',
@@ -72,10 +72,38 @@ for (const [path, raw] of Object.entries(readmeMdGlob)) {
   bySlug[slug] = { ...bySlug[slug], readmeMd: raw }
 }
 
+/** All skills under vessel/souls/{slug}/skills/{folder}/SKILL.md (sorted: main persona folder first, then A–Z). */
+const skillsBySoulSlug: Record<string, { folder: string; content: string }[]> = {}
+
+function sortSoulSkills(soulSlug: string, skills: { folder: string; content: string }[]) {
+  return [...skills].sort((a, b) => {
+    const aMain = a.folder === soulSlug ? 0 : 1
+    const bMain = b.folder === soulSlug ? 0 : 1
+    if (aMain !== bMain) return aMain - bMain
+    return a.folder.localeCompare(b.folder)
+  })
+}
+
 for (const [path, raw] of Object.entries(personaSkillGlob)) {
   const parsed = parsePersonaSkillPath(path)
-  if (!parsed || parsed.skillFolder !== parsed.soulSlug) continue
-  bySlug[parsed.soulSlug] = { ...bySlug[parsed.soulSlug], skillMd: raw }
+  if (!parsed) continue
+  const list = skillsBySoulSlug[parsed.soulSlug] ?? []
+  list.push({ folder: parsed.skillFolder, content: raw })
+  skillsBySoulSlug[parsed.soulSlug] = list
+}
+
+for (const soulSlug of Object.keys(skillsBySoulSlug)) {
+  const sorted = sortSoulSkills(soulSlug, skillsBySoulSlug[soulSlug]!)
+  skillsBySoulSlug[soulSlug] = sorted
+  const main = sorted.find((s) => s.folder === soulSlug)
+  const primary = main?.content ?? sorted[0]?.content
+  if (primary) {
+    bySlug[soulSlug] = { ...bySlug[soulSlug], skillMd: primary }
+  }
+}
+
+export function getBundledSoulSkills(slug: string): { folder: string; content: string }[] {
+  return skillsBySoulSlug[slug] ?? []
 }
 
 export function getBundledSoulPackage(slug: string): {

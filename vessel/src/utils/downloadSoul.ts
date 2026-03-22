@@ -1,7 +1,7 @@
 import JSZip from 'jszip'
 import type { Soul } from '../types'
 import { supabase } from '../lib/supabase'
-import { getBundledSoulPackage } from './bundledSouls'
+import { getBundledSoulPackage, getBundledSoulSkills } from './bundledSouls'
 
 // ── Fallback generators (used when real distilled files aren't available) ──
 
@@ -185,6 +185,7 @@ export async function downloadSoulZip(soul: Soul): Promise<void> {
   if (!folder) return
 
   const bundled = getBundledSoulPackage(soul.slug)
+  const bundledSkills = getBundledSoulSkills(soul.slug)
 
   // Prefer on-disk vessel/souls/{slug} bundle, then JSON fields, then fallbacks
   const soulMdContent =
@@ -199,6 +200,11 @@ export async function downloadSoulZip(soul: Soul): Promise<void> {
   folder.file('SKILL.md', skillMdContent)
   folder.file('MEMORY.md', memoryMdContent)
   folder.file('README.md', readmeContent)
+
+  for (const { folder: skillFolder, content } of bundledSkills) {
+    const skillDir = folder.folder(`skills/${skillFolder}`)
+    skillDir?.file('SKILL.md', content)
+  }
 
   const blob = await zip.generateAsync({ type: 'blob' })
   const url = URL.createObjectURL(blob)
