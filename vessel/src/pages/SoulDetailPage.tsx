@@ -672,7 +672,7 @@ export default function SoulDetailPage() {
                                   whiteSpace: 'pre-wrap',
                                   wordBreak: 'break-word',
                                   maxHeight: 'min(34rem, 58vh)',
-                                  overflowY: 'auto',
+                                  overflowY: 'hidden',
                                   margin: 0,
                                 }}
                               >

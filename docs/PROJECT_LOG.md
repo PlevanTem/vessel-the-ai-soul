@@ -26,6 +26,29 @@
 
 ## 历史记录
 
+### 2026-03-23 — 去掉根目录与 `vessel/` 重复的元数据 JSON；移除 `vessel/README.md`
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | `chore` |
+| **影响** | 仓库体积与重复维护；无运行时依赖 |
+| **摘要** | 删除 **`self_review.json`**、**`skills-lock.json`**、**`tech_decision.json`** 在 **仓库根** 与 **`vessel/`** 的副本；删除 **`vessel/README.md`**，以 **根目录 `README.md`** 为唯一说明入口。 |
+| **备注** | 若你本地把上述 JSON 挪到 **`reports/`**：该目录在 **`.gitignore`** 中，**不会推送到 GitHub**；若需团队共享，应改 ignore 或改存 **`docs/`** 等已跟踪路径。 |
+| **验证** | `npm run verify`。 |
+
+---
+
+### 2026-03-23 — Soul 详情 FILE EXPLORER：`<pre>` 垂直溢出改为 `hidden`
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | `chore`（UX 微调） |
+| **影响** | 用户可见 |
+| **摘要** | **`vessel/src/pages/SoulDetailPage.tsx`** 预览区 **`overflowY`** 由 **`auto`** 改为 **`hidden`**（与更高 `maxHeight` 组合使用时由产品设计决定裁切/外层滚动）。 |
+| **验证** | 本地刷新 Soul 详情 FILE EXPLORER。 |
+
+---
+
 ### 2026-03-22 — FILE EXPLORER：预览区 `<pre>` 可视高度与滚动
 
 | 字段 | 内容 |
