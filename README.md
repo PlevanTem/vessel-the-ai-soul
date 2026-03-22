@@ -278,15 +278,18 @@ The catalog grows by contribution.
 
 ## The Landing Page
 
-The product frontend lives in `vessel/outputs/vessel-landing@v4/`.
-
-Built with React 19 + TypeScript + Vite + Tailwind CSS V4 + Framer Motion. Visual layer: custom WebGL2 gold particle flow field, Canvas 2D success animations, grain texture.
+产品前端在 **`vessel/`**（React 19 + TypeScript + Vite + Tailwind v4 + Framer Motion）。Soul 元数据在 **`vessel/src/data/souls/*.json`**，蒸馏 Markdown 在 **`vessel/souls/{slug}/`** — 目录约定与引用关系见 **[docs/PROJECT_LAYOUT.md](docs/PROJECT_LAYOUT.md)**。
 
 ```bash
-cd vessel/outputs/vessel-landing@v4_20260317/03_frontend
-npm install
+# 仓库根：依赖安装仍在 vessel 内
+cd vessel && npm install && cd ..
+
+# 本地开发（可在仓库根执行，会转发到 vessel）
 npm run dev
 # → http://localhost:5173
+
+# 提交前自检：JSON ↔ souls 目录 是否对齐
+npm run verify
 ```
 
 ---

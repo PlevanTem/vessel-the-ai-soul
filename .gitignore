@@ -31,3 +31,7 @@ reports/
 
 # Firecrawl research cache
 .firecrawl/
+
+# 已与 vessel/ 去重：禁止在仓库根再出现第二套前端或 Soul 目录
+/src/
+/souls/

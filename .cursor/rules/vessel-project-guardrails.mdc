@@ -1,0 +1,29 @@
+---
+description: 保护 vessel 前端与 Soul 数据不被误删、避免根目录与 vessel 双份混乱
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Soulmkt / Vessel 项目守护规则
+
+## 单一真相目录
+
+- **网站与 Soul 产品数据** 的权威路径是 **`vessel/`**（`vessel/package.json`、`vessel/src/`、`vessel/souls/`、`vessel/src/data/souls/*.json`）。
+- 仓库根下 **不应** 再出现 **`src/`、`souls/`**（已由 `.gitignore` 屏蔽）；**不要**以「去重」为由删除 **`vessel/`** 内的 `src/` / `souls/`。
+
+## 禁止未经用户明确确认的操作
+
+- 批量删除或 `git rm`：**`vessel/src`**、**`vessel/souls`**、**`vessel/package.json`**、**`vessel/vite.config.ts`**、**`vessel/index.html`**。
+- 提交信息含 “remove root-level frontend” 类改动时，**必须先确认**当前仓库根是父仓库还是 **`vessel` 子仓库**，避免在 **`vessel` 根**误删整站。
+
+## 核心引用（修改时保持关联）
+
+- **`vessel/src/data/souls.ts`**：`import.meta.glob('./souls/*.json')` → 每个 `{slug}.json` 自动注册。
+- **`vessel/src/utils/bundledSouls.ts`**：`glob('../../souls/*/SOUL.md')` → JSON 的 **`slug`** 必须与 **`vessel/souls/{slug}/`** 目录名一致。
+- 新增 Soul：**同时**维护 `vessel/src/data/souls/{slug}.json` 与 `vessel/souls/{slug}/`（至少 `SOUL.md`）。
+
+## 变更后自检
+
+- 在仓库根执行：`npm run verify`（或 `npm run verify:souls --prefix vessel`）。
+- 完整说明见 **`docs/PROJECT_LAYOUT.md`**。
