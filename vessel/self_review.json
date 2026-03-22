@@ -1,0 +1,170 @@
+{
+  "stack": "react+typescript+vite",
+  "language": "typescript",
+  "delivery_mode": "multi-file",
+
+  "contract_compliance": [
+    {
+      "contract_id": "M01",
+      "feature": "Hero 区价值主张 + 主 CTA",
+      "acceptance_criteria": "Hero 区包含：品牌名 + 核心 Slogan + 1-2 句产品描述 + 主 CTA 按钮；CTA 点击后平滑滚动到表单区域",
+      "expression_goal": "全屏英雄区，生成式视觉背景，文字入场有 stagger 动画，质感达到 Stripe/Linear 品牌站水准",
+      "status": "met",
+      "evidence": "HeroSection.tsx — 全屏区域，Fraunces 字体大标题，Slogan 「Your mind, made permanent.」，Join Waitlist + See Demo 两个 CTA",
+      "expression_achieved": "Framer Motion stagger 入场序列，5 步骤时间线编排；WebGL flow field 金色粒子全局背景；Fraunces editorial 字体；金色主调",
+      "fail_condition_triggered": false,
+      "deviation_reason": null
+    },
+    {
+      "contract_id": "M02",
+      "feature": "工作流三步骤展示",
+      "acceptance_criteria": "展示 3 个步骤，每步有图标、标题、描述；步骤间有逻辑连接感",
+      "expression_goal": "非传统三卡片方式，步骤依次动画入场",
+      "status": "met",
+      "evidence": "WorkflowSection.tsx — 三步骤含 SVG 图标、标题、描述、功能列表；Framer Motion useInView 触发入场；SVG 连接线动画",
+      "expression_achieved": "步骤用数字编号圆圈 + SVG 图标；连接线使用 scaleX 动画；stagger 依次入场",
+      "fail_condition_triggered": false,
+      "deviation_reason": null
+    },
+    {
+      "contract_id": "M03",
+      "feature": "Demo Soul 对话展示区",
+      "acceptance_criteria": "展示 2+ 公众人物 Soul Demo；包含对话（Q+A）；支持人物切换",
+      "expression_goal": "打字机效果，切换有过渡动画",
+      "status": "met",
+      "evidence": "DemoSection.tsx — Paul Graham + Andrej Karpathy；AnimatePresence 切换；打字机 setInterval 逐字显示；终端样式界面",
+      "expression_achieved": "终端风格对话界面（仿 macOS 窗口栏），打字机效果，AnimatePresence slide 过渡，Soul traits 标签，文件结构展示",
+      "fail_condition_triggered": false,
+      "deviation_reason": null
+    },
+    {
+      "contract_id": "M04",
+      "feature": "定价方案展示",
+      "acceptance_criteria": "三档定价，每档有名称、价格、deliverables、适合人群；推荐方案高亮",
+      "expression_goal": "推荐方案有视觉强调，不是三个一样的卡片",
+      "status": "met",
+      "evidence": "PricingSection.tsx — 三档卡片，中间 Refined 卡片 scale(1.02) + 金色边框 + glow；Framer Motion hover 动效",
+      "expression_achieved": "推荐方案放大 + 金色 glow + 「Recommended」徽章；其他档位视觉适当降调",
+      "fail_condition_triggered": false,
+      "deviation_reason": null
+    },
+    {
+      "contract_id": "M05",
+      "feature": "Waitlist 注册表单（带验证）",
+      "acceptance_criteria": "邮件输入框（必填）；格式验证；提交后显示 loading 和成功确认",
+      "expression_goal": "表单精致，提交成功有值得记忆的动效",
+      "status": "met",
+      "evidence": "WaitlistForm.tsx — 邮件 + URL 双字段，实时验证，loading spinner，成功态 AnimatePresence，SuccessParticles Canvas 粒子爆散",
+      "expression_achieved": "成功态：粒子迸发 + 金色 ✓ 标记 + 成功信息；Gold focus border glow；表单完整状态机",
+      "fail_condition_triggered": false,
+      "deviation_reason": null
+    },
+    {
+      "contract_id": "M06",
+      "feature": "页面导航与锚点滚动",
+      "acceptance_criteria": "顶部导航包含链接；点击后平滑滚动；导航高亮当前区块",
+      "expression_goal": "导航毛玻璃效果，滚动后背景变化；移动端菜单动画",
+      "status": "met",
+      "evidence": "Navbar.tsx — scrollIntoView 平滑滚动；Intersection Observer 追踪当前区块；滚动后 backdrop-filter；AnimatePresence 移动端菜单",
+      "expression_achieved": "滚动后导航背景加深 + blur；活跃链接金色下划线（layoutId 动画）；移动端全屏菜单 fade-in",
+      "fail_condition_triggered": false,
+      "deviation_reason": null
+    },
+    {
+      "contract_id": "M07",
+      "feature": "移动端响应式适配",
+      "acceptance_criteria": "所有区块 375px+ 可正常浏览；表单可用；导航折叠",
+      "expression_goal": "移动端非 PC 端缩小版，针对竖向重新排布",
+      "status": "met",
+      "evidence": "所有组件使用 Tailwind responsive classes (md:grid-cols-3 等)；Navbar 移动端 hamburger；FlowField 移动端降级 (window.innerWidth < 768)",
+      "expression_achieved": "WebGL 在移动端自动跳过（CSS 渐变替代）；各区块移动端排布重新设计",
+      "fail_condition_triggered": false,
+      "deviation_reason": null
+    },
+    {
+      "contract_id": "M08",
+      "feature": "页面入场动画编排序列",
+      "acceptance_criteria": "Hero 各元素有 stagger 入场；后续区块滚动进入有 fade/slide 动效",
+      "expression_goal": "参考 Linear/Vercel 品牌站水准；GSAP/Framer Motion 时间线编排",
+      "status": "met",
+      "evidence": "HeroSection.tsx staggerVariants：5 步骤，delay 0.3+i*0.18；全站 Framer Motion useInView + variants；导航延迟 1.1s 入场",
+      "expression_achieved": "完整的 Hero 5 步骤 stagger；各区块 opacity+y fade-up；数字编排一致",
+      "fail_condition_triggered": false,
+      "deviation_reason": null
+    }
+  ],
+
+  "completed_items": [
+    "WebGL2 flow field 金色粒子背景（useFlowField hook + FlowField 组件）",
+    "Canvas 2D 成功粒子爆散（SuccessParticles 组件）",
+    "Framer Motion 全站动画编排",
+    "完整表单验证（邮件格式 + URL 格式）",
+    "Demo 打字机效果 + AnimatePresence 人物切换",
+    "FAQ 手风琴（多个同时展开）",
+    "定价推荐方案高亮",
+    "导航锚点滚动 + 活跃状态追踪",
+    "移动端 hamburger 菜单",
+    "CSS grain texture overlay",
+    "Tailwind V4 @theme 设计 token 系统",
+    "TypeScript 全类型覆盖（0 编译错误）"
+  ],
+
+  "design_fidelity_notes": [
+    "Fraunces + DM Sans 字体组合成功实现 editorial 气质",
+    "深黑底 (#0A0908) + 暗琥珀金调色板完全避免了紫蓝渐变 anti-pattern",
+    "Demo 终端界面是本案最有记忆点的视觉设计",
+    "定价推荐方案的视觉层级区分清晰"
+  ],
+
+  "interaction_completeness": {
+    "navigation": "完整实现 — 锚点滚动、区块高亮、移动端菜单",
+    "filtering": "N/A — 本案无筛选需求",
+    "forms": "完整实现 — 验证、loading、success、error 全状态",
+    "component_communication": "完整实现 — Demo 切换联动打字机、CTA 联动表单 focus",
+    "animation_orchestration": "完整实现 — Hero stagger、区块进入、切换过渡",
+    "modal_overlay": "N/A — 移动端菜单作为全屏 overlay 实现",
+    "empty_loading_error_states": "完整实现 — 表单 loading/success/error 全部有反馈"
+  },
+
+  "generative_visual_notes": [
+    "WebGL2 flow field 实现了 Perlin-like hash noise 驱动的金色粒子系统，3000 粒子，响应鼠标位置",
+    "Canvas 2D 粒子爆散为表单提交成功增加了仪式感动效",
+    "CSS grain texture 叠加增加了手工艺质感",
+    "移动端 WebGL 自动降级（isMobile 检测跳过 WebGL 初始化）",
+    "prefers-reduced-motion 支持：提前 return，不初始化 WebGL"
+  ],
+
+  "interaction_fidelity_notes": [
+    "Demo 切换：AnimatePresence 过渡 + 打字机重置，体验自然",
+    "表单提交：完整状态机（idle→loading→success/error），loading spinner 可见",
+    "FAQ 手风琴：AnimatePresence height 动画，支持多个同时展开"
+  ],
+
+  "a11y_notes": [
+    "WebGL canvas aria-hidden='true'",
+    "grain overlay aria-hidden='true'",
+    "FAQ 按钮有 aria-expanded",
+    "表单 input 有 aria-describedby 关联错误提示",
+    "所有按钮有语义文字",
+    "prefers-reduced-motion 跳过所有动效",
+    "focus-visible 金色 outline 全局定义"
+  ],
+
+  "performance_notes": [
+    "WebGL canvas visibilitychange 事件暂停/恢复 RAF",
+    "移动端 WebGL 降级避免 GPU 负担",
+    "Framer Motion 按需 import，Vite tree shaking"
+  ],
+
+  "known_gaps": [
+    "S02 滚动驱动视差：未引入 GSAP ScrollTrigger，使用 Framer Motion useInView 替代（acceptable_fallback 已满足）",
+    "打字机效果在 prefers-reduced-motion 时会直接显示完整文字（行为正确但未做特殊处理）",
+    "WaitlistForm 的 __focusWaitlist window 挂载是临时方案，生产中应使用 ref callback 或 context"
+  ],
+
+  "next_fix_candidates": [
+    "引入 @studio-freight/lenis 平滑滚动增强整体流畅感",
+    "Hero 文字可以升级为 ReactBits SplitText（需要 CLI 安装）",
+    "工作流步骤可以升级为 GSAP ScrollTrigger 精确时序"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "opennews": {
+      "source": "6551Team/opennews-mcp",
+      "sourceType": "github",
+      "computedHash": "58f1f968690668660633f68e408bda031c0eae2ded220589c1818cb98e024c8d"
+    }
+  }
+}

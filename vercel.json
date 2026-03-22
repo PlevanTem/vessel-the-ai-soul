@@ -1,6 +1,7 @@
 {
-  "installCommand": "npm install --prefix vessel",
-  "buildCommand": "npm run build --prefix vessel",
+  "framework": null,
+  "installCommand": "cd vessel && npm install",
+  "buildCommand": "cd vessel && npm run build",
   "outputDirectory": "vessel/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }

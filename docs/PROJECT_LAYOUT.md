@@ -61,4 +61,6 @@ npm run verify
 
 ## 部署（Vercel）
 
-若 Vercel 项目根指向**本仓库根**，使用根目录 **`vercel.json`**：`install` / `build` 走 `vessel/`，`outputDirectory` 为 **`vessel/dist`**。若已在控制台把 Root Directory 设为 **`vessel`**，可改用 `vessel/vercel.json` 并忽略根级配置。
+**`vessel/` 须以普通目录形式存在于仓库中**（勿再使用无 `.gitmodules` 的 submodule gitlink，否则 Vercel 克隆后 `vessel` 为空、构建失败）。
+
+详细步骤与控制台设置见 **[DEPLOY_VERCEL.md](DEPLOY_VERCEL.md)**。根目录 **`vercel.json`**：`install` / `build` 在 `vessel/` 内执行，`outputDirectory` 为 **`vessel/dist`**。

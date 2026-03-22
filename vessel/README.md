@@ -17,7 +17,7 @@
 [![License: MIT](https://img.shields.io/badge/Code-MIT-blue.svg)](LICENSE)
 [![Format](https://img.shields.io/badge/Format-SOUL.md-gold.svg)](#the-soul-format)
 
-[Browse Souls](#souls) · [Quick Start](#quick-start) · [Developer setup](#developer-setup) · [Repo layout](docs/PROJECT_LAYOUT.md) · [Build a Soul](#building-a-soul) · [vessel.ai](https://vessel.ai)
+[Browse Souls](#souls) · [Quick Start](#quick-start) · [Build a Soul](#building-a-soul) · [vessel.ai](https://vessel.ai)
 
 </div>
 
@@ -63,19 +63,14 @@ The format is open. If you can read Markdown, you can read — or write — a So
 
 ## Souls
 
-Distilled Markdown packages live under **`vessel/souls/{slug}/`**. The marketing site reads card copy from **`vessel/src/data/souls/*.json`** (same `slug`). See [docs/PROJECT_LAYOUT.md](docs/PROJECT_LAYOUT.md) for the full data flow.
-
 | Person | Domain | Quality | Install |
 |--------|--------|---------|---------|
 | [Naval Ravikant](vessel/souls/naval-ravikant/) | Wealth · Happiness · Judgment | ★★★★★ | [→ README](vessel/souls/naval-ravikant/README.md) |
 | [Sam Altman](vessel/souls/sam-altman/) | Startups · AGI · Compounding | ★★★★☆ | [→ README](vessel/souls/sam-altman/README.md) |
 | [Andrej Karpathy](vessel/souls/andrej-karpathy/) | ML · Software 3.0 · Teaching | ★★★★★ | [→ README](vessel/souls/andrej-karpathy/README.md) |
-| [Richard Feynman](vessel/souls/richard-feynman/) | Science · Teaching · First principles | ★★★★★ | [→ README](vessel/souls/richard-feynman/README.md) |
-| [Steve Jobs](vessel/souls/steve-jobs/) | Product · Taste · Simplicity | ★★★★☆ | [→ README](vessel/souls/steve-jobs/README.md) |
-| [Ryo Lu](vessel/souls/ryo-lu/) | Design · Systems · Soulful AI | ★★★★☆ | [→ README](vessel/souls/ryo-lu/README.md) |
-| *Paul Graham* | *(catalog placeholder)* | — | — |
-| *Derek Sivers* | *(catalog placeholder)* | — | — |
-| *Morgan Housel* | *(catalog placeholder)* | — | — |
+| *Paul Graham* | *(coming soon)* | — | — |
+| *Derek Sivers* | *(coming soon)* | — | — |
+| *Morgan Housel* | *(coming soon)* | — | — |
 
 ---
 
@@ -224,52 +219,39 @@ A Soul with more than 10% unverifiable claims is rejected. There is no "probably
 
 ## Repository Structure
 
-**Single source of truth for the web app and Soul packages: `vessel/`.**  
-The repo root holds docs, agent skills, and thin npm scripts — **no duplicate `src/` or `souls/` at the root** (see [docs/PROJECT_LAYOUT.md](docs/PROJECT_LAYOUT.md)).
-
 ```
-.                                # Workspace root
-├── package.json                 # npm scripts only → delegate to vessel/ (no duplicate deps)
-├── vercel.json                  # If deploy root = repo: build output from vessel/dist
-├── docs/
-│   └── PROJECT_LAYOUT.md        # Canonical paths, Soul JSON ↔ Markdown rules, verify
+vessel/                          # The development product project dir with Soul catalog and product assets
+├── souls/
+│   ├── naval-ravikant/          # SOUL.md + MEMORY.md + skills/
+│   ├── sam-altman/
+│   ├── andrej-karpathy/
+│   └── {person-slug}/
+│       ├── SOUL.md              # Identity — system prompt
+│       ├── MEMORY.md            # Knowledge — frameworks and arguments
+│       ├── README.md            # Quick install
+│       └── skills/              # Agent Skills (persona + task workflows)
+├── templates/                   # Blank starting templates for new Souls
+│   ├── SOUL.md
+│   ├── MEMORY.md
+│   └── USAGE_GUIDE.md
+
+.agents/skills/soul-miner/       # The Soul Miner pipeline
+├── SKILL.md                     # AI workflow orchestrator (6 phases)
 ├── scripts/
-│   └── verify-soul-integrity.mjs
-├── vessel/                      # ★ Landing + Soul catalog (React / Vite app)
-│   ├── package.json
-│   ├── vite.config.ts
-│   ├── index.html
-│   ├── src/
-│   │   ├── data/souls/*.json    # Site cards & detail metadata (glob-loaded)
-│   │   └── utils/bundledSouls.ts # Bundles vessel/souls/*/SOUL.md at build time
-│   ├── souls/
-│   │   ├── naval-ravikant/      # SOUL.md + MEMORY.md + skills/
-│   │   ├── sam-altman/
-│   │   ├── andrej-karpathy/
-│   │   └── {person-slug}/
-│   │       ├── SOUL.md
-│   │       ├── MEMORY.md
-│   │       ├── README.md
-│   │       └── skills/
-│   └── templates/               # Blank templates for new Souls (if present)
-│
-├── .agents/skills/soul-miner/   # Soul Miner pipeline (Python)
-│   ├── SKILL.md
-│   ├── scripts/
-│   │   ├── discover.py
-│   │   ├── mine.py
-│   │   ├── distill.py
-│   │   └── run.py
-│   └── references/
-│       ├── source-priority.md
-│       ├── soul-archaeologist.md
-│       ├── output-templates.md
-│       ├── authenticity-checker.md
-│       └── dialogue-tester.md
-│
-└── reports/                     # Strategy & research (optional)
-    ├── 01_pm/
-    └── 02_designer/
+│   ├── discover.py              # Platform discovery
+│   ├── mine.py                  # Content extraction
+│   ├── distill.py               # Analysis → Soul files
+│   └── run.py                   # Full pipeline runner
+└── references/
+    ├── source-priority.md       # P0–P3 source quality standard
+    ├── soul-archaeologist.md    # 6-dimension analysis framework
+    ├── output-templates.md      # File templates + writing craft guide
+    ├── authenticity-checker.md  # 3-tier fact-check system
+    └── dialogue-tester.md       # 20-question quality test
+
+reports/                         # Strategy and research
+├── 01_pm/                       # Product strategy, PRD, market research
+└── 02_designer/                 # Design system, component specs
 ```
 
 ---
@@ -284,11 +266,9 @@ The catalog grows by contribution.
 2. Verify authenticity (Phase 5 — check that 🔴 claims are under 10%)
 3. Run the dialogue test (Phase 6 — score ≥ 15/20)
 4. Place output in `vessel/souls/{person-slug}/`
-5. To list the Soul on the site, add `vessel/src/data/souls/{person-slug}.json` (see `vessel/src/data/HOW_TO_ADD_SOUL.md`)
-6. Run `npm run verify` from the repo root before opening a PR
-7. Open a PR with a brief note on source quality and material volume
+5. Open a PR with a brief note on source quality and material volume
 
-**Contribution guidelines (PR checklist):**
+**Contribution guidelines:**
 - Public figures only, with substantial public writing or speaking records
 - No fabrication — if you can't source it, mark it `[INFERRED]` or remove it
 - Living private individuals require their explicit consent
@@ -296,33 +276,18 @@ The catalog grows by contribution.
 
 ---
 
-## Developer setup
+## The Landing Page
 
-The **product frontend** lives entirely in **`vessel/`**: React 19, TypeScript, Vite, Tailwind v4, Framer Motion, plus generative canvas layers.
+The product frontend lives in `vessel/outputs/vessel-landing@v4/`.
 
-| What | Where |
-|------|--------|
-| Soul card / detail JSON | `vessel/src/data/souls/{slug}.json` |
-| Distilled Markdown packages | `vessel/souls/{slug}/` |
-| Layout & invariants | [docs/PROJECT_LAYOUT.md](docs/PROJECT_LAYOUT.md) |
+Built with React 19 + TypeScript + Vite + Tailwind CSS V4 + Framer Motion. Visual layer: custom WebGL2 gold particle flow field, Canvas 2D success animations, grain texture.
 
 ```bash
-# Install deps (run inside vessel)
-cd vessel && npm install
-
-# Dev server — from repo root (forwards to vessel)
-cd ..   # back to repo root if needed
+cd vessel/outputs/vessel-landing@v4_20260317/03_frontend
+npm install
 npm run dev
 # → http://localhost:5173
-
-# Optional: integrity check (JSON ↔ vessel/souls folders, core files present)
-npm run verify
-npm run verify:strict   # fail on warnings (e.g. missing SOUL.md for a slug)
 ```
-
-**Deploy (Vercel):** See **[docs/DEPLOY_VERCEL.md](docs/DEPLOY_VERCEL.md)** (submodule / Root Directory / dashboard overrides). Root `vercel.json` builds from `vessel/` → `vessel/dist`.
-
-**Add a Soul to the site:** see `vessel/src/data/HOW_TO_ADD_SOUL.md` (paths relative to `vessel/`).
 
 ---
 

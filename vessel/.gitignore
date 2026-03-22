@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.vite/
+
+# Env files — NEVER commit
+.env
+.env.local
+.env.*
+
+# TypeScript cache
+tsconfig.tsbuildinfo
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Pipeline artifacts (not needed for deployment)
+outputs/
+
+# Workspace-level ignores
+.agents/
+soulmkt/
+materials/souls-zip/
+reports/
+
+# Firecrawl research cache
+.firecrawl/
