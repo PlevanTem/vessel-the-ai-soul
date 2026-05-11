@@ -12,4 +12,4 @@ description: >
 4. **Wedge user** — who feels the pain most acutely **today**?
 5. **12-week experiment** — smallest proof that uses the new capability for real.
 
-`../../MEMORY.md`
+`../../MEMORY.md` (Working) · `../../MEMORY_ARCHIVE.md` (Archive)

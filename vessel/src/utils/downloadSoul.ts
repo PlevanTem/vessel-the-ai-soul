@@ -143,7 +143,8 @@ This Soul was distilled by [Vessel](https://vessel.ai) from public content only.
 |------|---------|---------|
 | \`SOUL.md\` | Identity — who they are, how they think, how they communicate | System prompt |
 | \`SKILL.md\` | Capabilities — what they do best, trigger phrases, installation guide | Reference |
-| \`MEMORY.md\` | Knowledge base — arguments, frameworks, positions, case studies | Context |
+| \`MEMORY.md\` | **Working memory** — compact facts, preferences, decisions (~≤200 lines, line entries) | Default context with SOUL |
+| \`MEMORY_ARCHIVE.md\` | **Archive** (optional in ZIP) — long arguments, frameworks, full case notes | On-demand (e.g. \`memory_get\` / read file) |
 
 ## Quick Start
 
@@ -194,11 +195,15 @@ export async function downloadSoulZip(soul: Soul): Promise<void> {
     bundled.skillMd ?? soul.skillMd ?? buildFallbackSkillMd(soul)
   const memoryMdContent =
     bundled.memoryMd ?? soul.memoryMd ?? buildFallbackMemoryMd(soul)
+  const memoryArchiveMdContent = bundled.memoryArchiveMd
   const readmeContent = bundled.readmeMd ?? buildReadme(soul)
 
   folder.file('SOUL.md', soulMdContent)
   folder.file('SKILL.md', skillMdContent)
   folder.file('MEMORY.md', memoryMdContent)
+  if (memoryArchiveMdContent) {
+    folder.file('MEMORY_ARCHIVE.md', memoryArchiveMdContent)
+  }
   folder.file('README.md', readmeContent)
 
   for (const { folder: skillFolder, content } of bundledSkills) {

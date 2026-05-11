@@ -1,7 +1,6 @@
 ---
-description: 保护 vessel 前端与 Soul 数据不被误删、避免根目录与 vessel 双份混乱
-globs:
-  - "**/*"
+description: 项目开发 guardrails，保护 vessel 前端与 Soul 数据不被误删、避免根目录与 vessel 双份混乱
+paths: "vessel/"
 alwaysApply: true
 ---
 
@@ -26,7 +25,7 @@ alwaysApply: true
 ## 变更后自检
 
 - 在仓库根执行：`npm run verify`（或 `npm run verify:souls --prefix vessel`）。
-- 完整说明见 **`docs/PROJECT_LAYOUT.md`**。
+- 完整说明见 **`@docs/PROJECT_LAYOUT.md`**。
 
 ## 工程日志
 

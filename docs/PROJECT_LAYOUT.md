@@ -10,7 +10,9 @@
 |------|-----------|------|
 | **网站 / Vite 前端** | `vessel/` | `package.json`、`vite.config.ts`、`index.html`、`src/` 全部以 **`vessel/` 根** 为准。 |
 | **Soul 列表数据（JSON）** | `vessel/src/data/souls/*.json` | `src/data/souls.ts` 通过 `import.meta.glob` **自动扫描** 该目录，无需手工注册表。 |
-| **Soul 蒸馏包（Markdown）** | `vessel/souls/{slug}/` | `src/utils/bundledSouls.ts` 在构建时 `glob` **`vessel/souls/*/SOUL.md`** 等，供下载 ZIP 优先使用。 |
+| **Soul 蒸馏包（Markdown）** | `vessel/souls/{slug}/` | `src/utils/bundledSouls.ts` 在构建时 `glob` **`vessel/souls/*/SOUL.md`**、`MEMORY.md`、可选 **`MEMORY_ARCHIVE.md`** 等，供详情预览与下载 ZIP。 |
+
+**MEMORY 双层（与 OpenClaw 概念对齐）**：根级 **`MEMORY.md`** = **Working**（默认可与 SOUL 一起加载的短记忆，行式条目）；**`MEMORY_ARCHIVE.md`** = **Archive**（长文论据/框架，按需读取，不默认注入）。OpenClaw workspace 侧还可维护运行时 **`memory/YYYY-MM-DD.md`** 日更（不属于 Soul 包必含文件）；规范见 `.agents/skills/soul-miner/SKILL.md`。
 
 **结论：任何面向产品的修改，请只在 `vessel/` 下进行。**
 
@@ -19,7 +21,7 @@
 ```
 vessel/src/data/souls/{slug}.json   ←── 列表 / 详情元数据（slug 与文件名一致）
         │
-        └── slug 应对应 ──→  vessel/souls/{slug}/SOUL.md（及 MEMORY.md、README.md、skills/…）
+        └── slug 应对应 ──→  vessel/souls/{slug}/SOUL.md（及 MEMORY.md、可选 MEMORY_ARCHIVE.md、README.md、skills/…）
                                     ↑
                     bundledSouls.ts（../../souls/*/…）
 ```
@@ -57,7 +59,7 @@ npm run verify
 ## 新增 Soul 检查清单
 
 1. 新增 `vessel/src/data/souls/{slug}.json`（`slug` 与文件名一致）。
-2. 新增 `vessel/souls/{slug}/`（至少 `SOUL.md`；建议 `MEMORY.md`、`README.md`、persona `skills/{slug}/SKILL.md`）。
+2. 新增 `vessel/souls/{slug}/`（至少 `SOUL.md`；建议 `MEMORY.md`（Working）、新包可加 `MEMORY_ARCHIVE.md`（Archive）、`README.md`、persona `skills/{slug}/SKILL.md`）。
 3. 运行 `npm run verify`。
 4. 详情见 `vessel/src/data/HOW_TO_ADD_SOUL.md`（路径相对于 **`vessel/`**）。
 

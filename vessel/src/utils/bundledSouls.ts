@@ -15,6 +15,12 @@ const memoryMdGlob = import.meta.glob('../../souls/*/MEMORY.md', {
   import: 'default',
 }) as Record<string, string>
 
+const memoryArchiveMdGlob = import.meta.glob('../../souls/*/MEMORY_ARCHIVE.md', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+}) as Record<string, string>
+
 const readmeMdGlob = import.meta.glob('../../souls/*/README.md', {
   eager: true,
   query: '?raw',
@@ -38,6 +44,11 @@ function slugFromMemoryPath(path: string): string | undefined {
   return m?.[1]
 }
 
+function slugFromMemoryArchivePath(path: string): string | undefined {
+  const m = path.match(/souls\/([^/]+)\/MEMORY_ARCHIVE\.md$/)
+  return m?.[1]
+}
+
 function slugFromReadmePath(path: string): string | undefined {
   const m = path.match(/souls\/([^/]+)\/README\.md$/)
   return m?.[1]
@@ -51,7 +62,7 @@ function parsePersonaSkillPath(path: string): { soulSlug: string; skillFolder: s
 
 const bySlug: Record<
   string,
-  { soulMd?: string; memoryMd?: string; skillMd?: string; readmeMd?: string }
+  { soulMd?: string; memoryMd?: string; memoryArchiveMd?: string; skillMd?: string; readmeMd?: string }
 > = {}
 
 for (const [path, raw] of Object.entries(soulMdGlob)) {
@@ -64,6 +75,12 @@ for (const [path, raw] of Object.entries(memoryMdGlob)) {
   const slug = slugFromMemoryPath(path)
   if (!slug) continue
   bySlug[slug] = { ...bySlug[slug], memoryMd: raw }
+}
+
+for (const [path, raw] of Object.entries(memoryArchiveMdGlob)) {
+  const slug = slugFromMemoryArchivePath(path)
+  if (!slug) continue
+  bySlug[slug] = { ...bySlug[slug], memoryArchiveMd: raw }
 }
 
 for (const [path, raw] of Object.entries(readmeMdGlob)) {
@@ -109,6 +126,7 @@ export function getBundledSoulSkills(slug: string): { folder: string; content: s
 export function getBundledSoulPackage(slug: string): {
   soulMd?: string
   memoryMd?: string
+  memoryArchiveMd?: string
   skillMd?: string
   readmeMd?: string
 } {

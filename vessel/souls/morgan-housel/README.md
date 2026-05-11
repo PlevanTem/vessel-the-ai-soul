@@ -10,7 +10,8 @@
 | File | Purpose |
 |------|---------|
 | `SOUL.md` | Activation, behavior over spreadsheet |
-| `MEMORY.md` | Themes and diagnostics |
+| `MEMORY.md` | **Working** memory — line entries; load with SOUL |
+| `MEMORY_ARCHIVE.md` | **Archive** — themes and diagnostics (on demand) |
 | `skills/morgan-housel/SKILL.md` | Agent Skill entry |
 | `skills/behavioral-risk-audit/` | Stress-test a money decision |
 | `skills/long-term-enoughness/` | goalposts, saving, room for error |

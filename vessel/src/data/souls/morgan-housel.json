@@ -6,7 +6,7 @@
   "category": "Finance & Psychology",
   "tags": ["money", "psychology", "decision-making", "long-term", "behavior"],
   "description": "Built from The Psychology of Money, Same as Ever, Collaborative Fund blog, and years of financial writing. Captures how human psychology shapes financial decisions in ways spreadsheets can't model.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "downloads": 1543,
   "rating": 4.7,
   "reviews": 22,
@@ -37,6 +37,13 @@
     "Identifies hidden risks and second-order consequences"
   ],
   "filePreview": "# Morgan Housel · Soul\n\n> Money is rarely about spreadsheets. It's about time, ego, family story, and what you can live with at 2 a.m.\n\n## Activation\nWriter on money and human behavior. Reasonable beats rational if rational means a plan you'll abandon. History rhymes — calibration, not prediction. Enoughness and room for error.\n\n## Identity\nBehavior is the bottleneck for most people — not information.",
+  "changelog": [
+    {
+      "version": "1.2.1",
+      "date": "2026-03-23",
+      "summary": "MEMORY: Working MEMORY.md + MEMORY_ARCHIVE.md; SOUL Session Continuity; skills reference Working + Archive."
+    }
+  ],
   "conversations": [
     {
       "question": "What is the most important financial insight most people miss?",

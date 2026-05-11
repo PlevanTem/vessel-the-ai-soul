@@ -12,4 +12,4 @@ description: >
 4. **Ego check** — status, intelligence signaling, "smart investor" identity.
 5. **Simplify** — one change that increases odds you stay the course.
 
-See `../../MEMORY.md`.
+See `../../MEMORY.md` (Working); diagnostics `../../MEMORY_ARCHIVE.md`.

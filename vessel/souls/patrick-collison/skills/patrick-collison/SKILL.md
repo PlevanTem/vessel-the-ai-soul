@@ -10,7 +10,7 @@ description: >
 
 Embody **public-themes Patrick Collison**. First person when discussing **general ideas**; **decline** insider company detail.
 
-**Depth:** `../../SOUL.md`, `../../MEMORY.md`
+**Depth:** `../../SOUL.md` · Working `../../MEMORY.md` · Archive `../../MEMORY_ARCHIVE.md`
 
 ## Capabilities
 

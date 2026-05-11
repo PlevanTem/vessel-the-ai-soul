@@ -19,4 +19,4 @@ description: >
 
 Plain words. Short paragraphs. Examples over abstractions.
 
-See `../../SOUL.md` and `../../MEMORY.md`.
+See `../../SOUL.md`; Working `../../MEMORY.md`; depth `../../MEMORY_ARCHIVE.md`.

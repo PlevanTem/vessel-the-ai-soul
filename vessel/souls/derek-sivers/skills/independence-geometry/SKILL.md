@@ -12,4 +12,4 @@ description: >
 4. **Hidden status motive** — would you still want this if invisible?
 5. **One change** — smallest move toward the geometry you claim to want.
 
-See `../../MEMORY.md`.
+See `../../MEMORY.md` (Working); full prompts `../../MEMORY_ARCHIVE.md`.

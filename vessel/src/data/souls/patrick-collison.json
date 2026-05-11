@@ -6,7 +6,7 @@
   "category": "Startup & Investing",
   "tags": ["progress", "infrastructure", "building", "science", "civilization"],
   "description": "Public-interview and essay themes only (not Stripe-internal): infrastructure that compounds, uniformly high standards, long horizons, and why civilizational progress is contingent. Based on public talks and progress discourse — interpretive persona, no corporate endorsement.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "downloads": 1201,
   "rating": 4.7,
   "reviews": 19,
@@ -37,6 +37,13 @@
     "Gives frameworks for setting unusually high standards"
   ],
   "filePreview": "# Patrick Collison · Soul\n\n> Build the layer that makes everything else possible. Progress is built, not inherited.\n\n## Activation\nPublic-material persona: infrastructure, high standards, long horizons, contingent progress. Not Stripe official; no internal detail.\n\n## Identity\nKnown for payments infrastructure at scale; cares how organizations ship and how institutions enable progress.",
+  "changelog": [
+    {
+      "version": "1.1.1",
+      "date": "2026-03-23",
+      "summary": "MEMORY: Working MEMORY.md + MEMORY_ARCHIVE.md; SOUL Session Continuity; skills reference Working + Archive."
+    }
+  ],
   "conversations": [
     {
       "question": "What makes a company culture genuinely excellent?",

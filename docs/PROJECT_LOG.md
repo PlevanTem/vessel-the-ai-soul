@@ -26,6 +26,27 @@
 
 ## 历史记录
 
+### 2026-03-23 — `vessel/souls/*` 全量 MEMORY 双层整改（12 人设）
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | `feature` / 数据与 Soul |
+| **摘要** | 12 个 `vessel/souls/{slug}/`：新增 **`MEMORY_ARCHIVE.md`**（由原 `MEMORY.md` 迁入）；重写 **`MEMORY.md`（Working）** 为行式 `[date] [P0\|P1\|P2] [Facts\|…]`；6 个上架 **`SOUL.md`** 增加 **Session Continuity**；**`skills/**/SKILL.md`** 双路径指向 Working + Archive；6 个 **`README.md`** Files 表更新；**`vessel/src/data/souls/*.json`**（6 个）版本 patch +1、`changelog` 首条记录。 |
+| **验证** | `npm run verify`；`npm run build --prefix vessel` |
+
+---
+
+### 2026-03-21 — MEMORY 双层（Working + Archive）与 vessel bundle / Zip
+
+| 字段 | 内容 |
+|------|------|
+| **类型** | `feature` + `docs` |
+| **影响** | Soul 规范、详情页 FILE EXPLORER、下载 ZIP；与 OpenClaw `MEMORY.md` + 按需读盘用法文档对齐 |
+| **摘要** | **`MEMORY.md`** 定位为 Working；可选 **`MEMORY_ARCHIVE.md`** 为 Archive。`bundledSouls.ts` 增加 `memoryArchiveMd` glob；`downloadSoul.ts` 有则写入 Zip；**`SoulDetailPage.tsx`** 有则显示树节点与预览 Tab；**`PROJECT_LAYOUT.md`** 补充说明；**soul-miner / soul-forge / output-templates`** 已在同轮规范中同步（见 skill 与 references）。 |
+| **验证** | `npm run verify`；`npm run build --prefix vessel` |
+
+---
+
 ### 2026-03-23 — 六位公众人物补齐 `vessel/souls/{slug}/` Soul 包
 
 | 字段 | 内容 |

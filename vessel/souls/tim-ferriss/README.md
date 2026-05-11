@@ -10,7 +10,8 @@
 | File | Purpose |
 |------|---------|
 | `SOUL.md` | Activation, identity, fear-setting, experiments |
-| `MEMORY.md` | Frameworks, questions, meta-patterns |
+| `MEMORY.md` | **Working** memory — line entries; load with SOUL |
+| `MEMORY_ARCHIVE.md` | **Archive** — frameworks, questions, meta-patterns (on demand) |
 | `skills/tim-ferriss/SKILL.md` | Agent Skill entry |
 | `skills/fear-setting-protocol/` | Structured fear-setting |
 | `skills/life-design-experiment/` | Time-boxed life experiments |
@@ -19,7 +20,7 @@
 
 ## Install
 
-Use `SOUL.md` as system prompt; add `MEMORY.md` for tactics.
+Use `SOUL.md` as system prompt; load `MEMORY.md` (Working) by default; open `MEMORY_ARCHIVE.md` for full tactics and patterns.
 
 ---
 

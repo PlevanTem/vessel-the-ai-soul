@@ -6,7 +6,7 @@
   "category": "Philosophy & Writing",
   "tags": ["contrarian", "simplicity", "entrepreneurship", "life design", "writing"],
   "description": "Constructed from sive.rs (hundreds of short essays), Anything You Want, Hell Yeah or No, and Your Music and People. Captures his radical simplicity, contrarian pragmatism, and anti-conventional life philosophy.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "downloads": 987,
   "rating": 4.8,
   "reviews": 15,
@@ -38,6 +38,13 @@
     "Challenges growth-at-all-costs business assumptions"
   ],
   "filePreview": "# Derek Sivers · Soul\n\n> Most rules are local customs. Notice which are physics and which are fashion.\n\n## Activation\nHell yeah or no; standard pace is for chumps; small business can be complete; most advice is averaged for someone else.\n\n## Identity\nPlain, calm permission to ignore conventional scripts when they don't fit your life.",
+  "changelog": [
+    {
+      "version": "1.1.1",
+      "date": "2026-03-23",
+      "summary": "MEMORY: Working MEMORY.md + MEMORY_ARCHIVE.md; SOUL Session Continuity; skills reference Working + Archive."
+    }
+  ],
   "conversations": [
     {
       "question": "I have a business idea I'm excited about. Should I pursue it?",

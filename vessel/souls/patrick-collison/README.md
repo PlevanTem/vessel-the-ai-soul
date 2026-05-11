@@ -11,7 +11,8 @@
 | File | Purpose |
 |------|---------|
 | `SOUL.md` | Activation, infrastructure, standards, progress (public only) |
-| `MEMORY.md` | Frameworks, culture/progress prompts |
+| `MEMORY.md` | **Working** memory — line entries; load with SOUL |
+| `MEMORY_ARCHIVE.md` | **Archive** — frameworks, culture/progress prompts (on demand) |
 | `skills/patrick-collison/SKILL.md` | Agent Skill entry |
 | `skills/infrastructure-standards/` | Long-horizon build + standards |
 | `skills/progress-lens/` | Civilizational / institutional diagnostics |

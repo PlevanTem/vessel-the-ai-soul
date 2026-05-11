@@ -24,11 +24,11 @@ Thumbs.db
 outputs/
 
 # Workspace-level ignores
-.agents/
 soulmkt/
 materials/souls-zip/
 reports/
 canvas/
+docs/
 
 # Firecrawl research cache
 .firecrawl/

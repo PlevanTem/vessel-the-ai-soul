@@ -1,0 +1,101 @@
+{
+  "skill_name": "soul-miner",
+  "description": "Tests for Soul Miner skill — verifying correct triggering, workflow execution, and output quality",
+  "evals": [
+    {
+      "id": 1,
+      "name": "paul-graham-full-pipeline",
+      "prompt": "帮我挖掘 Paul Graham 的 Soul，他是 Y Combinator 的联合创始人，写了大量关于创业和编程的文章，主要内容在 paulgraham.com。我想生成一套可以部署的人格文件。",
+      "expected_output": "完成 Phase 1-4 全流程，在 vessel/souls/paul-graham/ 目录下生成 SOUL.md、SKILL.md、MEMORY.md 和 README.md 四个文件。SOUL.md 应包含 Identity、How I Think、What I Believe、How I Communicate、How I Decide、What I Refuse、My Blind Spots 所有章节，且全程第一人称英文。MEMORY.md 应包含至少 10 条 Core Arguments，每条有来源标注。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "生成了 SOUL.md 文件，且文件非空（>500 字）",
+          "type": "file_exists_and_not_empty"
+        },
+        {
+          "text": "SOUL.md 使用第一人称（包含 'I ' 或 'my ' 开头的句子）",
+          "type": "content_pattern"
+        },
+        {
+          "text": "SOUL.md 包含 How I Think 章节",
+          "type": "section_present"
+        },
+        {
+          "text": "SOUL.md 包含 What I Refuse 章节",
+          "type": "section_present"
+        },
+        {
+          "text": "MEMORY.md 包含 Core Arguments 章节，且有来源标注（包含 'Source:'）",
+          "type": "content_pattern"
+        },
+        {
+          "text": "SKILL.md 包含 Trigger Phrases 章节",
+          "type": "section_present"
+        },
+        {
+          "text": "README.md 存在且包含安装说明",
+          "type": "file_exists_and_not_empty"
+        },
+        {
+          "text": "所有推断性内容有 [INFERRED] 标注",
+          "type": "inferred_marking_present"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "chinese-person-wechat-search",
+      "prompt": "我想做一个李笑来的 Soul，他是《把时间当作朋友》的作者，在微信公众号和 Twitter 上都很活跃。用 --chinese 模式搜索，帮我搜集资料并生成人格文件。",
+      "expected_output": "触发 soul-miner，因为人名是中文，应启用 --chinese 模式额外搜索微信公众号。完成 Phase 1-4，生成 li-xiaolai/ 目录下的四文件。由于是中文博主，SOUL.md 中的 How I Communicate 应有关于他中文写作风格的具体描述。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Phase 1 输出中包含微信公众号来源（type: wechat）或明确说明搜索了微信",
+          "type": "wechat_source_attempted"
+        },
+        {
+          "text": "生成了 li-xiaolai/SOUL.md（slug 正确格式化）",
+          "type": "file_exists_and_not_empty"
+        },
+        {
+          "text": "SOUL.md 的 How I Communicate 章节有具体内容（>100字）",
+          "type": "section_has_content"
+        },
+        {
+          "text": "内容不足时给出了警告并建议补充来源",
+          "type": "quality_check_present"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "url-provided-fast-path",
+      "prompt": "给我做一个 Naval Ravikant 的人格文件，他的主要内容在 nav.al，Twitter 是 @naval，还有 The Almanack of Naval Ravikant 这本书。我已经知道这些来源了，直接开始吧。",
+      "expected_output": "接受用户提供的已知 URL，将其作为 P0 种子来源直接加入 sources_discovered.json，跳过这些来源的搜索但继续搜索其他可能的源。生成 naval-ravikant/ 四文件。MEMORY.md 的 Counterintuitive Takes 应包含他著名的观点（如财富≠钱、特定知识等）。",
+      "files": [],
+      "assertions": [
+        {
+          "text": "用户提供的 nav.al 被识别为 P0 来源",
+          "type": "user_url_as_p0"
+        },
+        {
+          "text": "生成了 naval-ravikant/SOUL.md",
+          "type": "file_exists_and_not_empty"
+        },
+        {
+          "text": "MEMORY.md 包含 Counterintuitive Takes 章节，且有 8 条以上条目",
+          "type": "section_has_minimum_items"
+        },
+        {
+          "text": "SOUL.md 包含他的标志性主题（财富 / wealth / specific knowledge 等关键词之一）",
+          "type": "key_topic_present"
+        },
+        {
+          "text": "生成的文件使用英文（非中文）",
+          "type": "language_check"
+        }
+      ]
+    }
+  ]
+}

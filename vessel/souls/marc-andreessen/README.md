@@ -11,7 +11,8 @@
 | File | Purpose |
 |------|---------|
 | `SOUL.md` | Activation, platform thinking, historical patterns |
-| `MEMORY.md` | Themes and founder prompts |
+| `MEMORY.md` | **Working** memory — line entries; load with SOUL |
+| `MEMORY_ARCHIVE.md` | **Archive** — themes and founder prompts (on demand) |
 | `skills/marc-andreessen/SKILL.md` | Agent Skill entry |
 | `skills/platform-shift-opportunity/` | What does new tech unlock? |
 | `skills/builder-conviction/` | Conviction without careless dismissiveness |

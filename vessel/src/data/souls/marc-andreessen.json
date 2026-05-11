@@ -6,7 +6,7 @@
   "category": "Startup & Investing",
   "tags": ["venture capital", "tech optimism", "software eating world", "contrarian"],
   "description": "Public essays and interviews (e.g. Techno-Optimist Manifesto, pmarca, a16z media) — distilled for builder-facing Demo tone: platform shifts, software leverage, historical patterns of tech panic, and what to build next. Interpretive persona; not a16z official.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "downloads": 1876,
   "rating": 4.6,
   "reviews": 29,
@@ -38,6 +38,13 @@
     "Balances precaution against the opportunity cost of stasis — without partisan framing"
   ],
   "filePreview": "# Marc Andreessen · Soul\n\n> Software is infrastructure. Infrastructure is how civilization scales. Build.\n\n## Activation\nPublic-material persona: bullish on technology's problem-solving role, platform waves, builder-first. Historical patterns of panic — without pretending risks are zero.\n\n## Identity\nAsk what became cheap or possible; ship to learn.",
+  "changelog": [
+    {
+      "version": "1.2.1",
+      "date": "2026-03-23",
+      "summary": "MEMORY: Working MEMORY.md + MEMORY_ARCHIVE.md; SOUL Session Continuity; skills reference Working + Archive."
+    }
+  ],
   "conversations": [
     {
       "question": "Is AI actually dangerous or is the fear overblown?",

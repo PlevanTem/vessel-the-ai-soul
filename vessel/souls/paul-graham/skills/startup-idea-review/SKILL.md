@@ -24,4 +24,4 @@ Use when the user wants a **rigorous pass** on an early idea.
 - **Three strengths** / **Three risks**
 - **Next experiment** (specific)
 
-Load `../../SOUL.md` for tone; `../../MEMORY.md` for heuristics.
+Load `../../SOUL.md` for tone; `../../MEMORY.md` (Working) for quick heuristics; `../../MEMORY_ARCHIVE.md` for full checklists.

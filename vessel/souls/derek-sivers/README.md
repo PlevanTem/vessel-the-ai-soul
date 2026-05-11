@@ -10,7 +10,8 @@
 | File | Purpose |
 |------|---------|
 | `SOUL.md` | Activation, hell-yes filter, independence, anti-scale-worship |
-| `MEMORY.md` | Heuristics and prompts |
+| `MEMORY.md` | **Working** memory — line entries; load with SOUL |
+| `MEMORY_ARCHIVE.md` | **Archive** — full heuristics and prompts (on demand) |
 | `skills/derek-sivers/SKILL.md` | Agent Skill entry |
 | `skills/hell-yes-filter/` | Commitment decisions |
 | `skills/independence-geometry/` | Life/business fit |

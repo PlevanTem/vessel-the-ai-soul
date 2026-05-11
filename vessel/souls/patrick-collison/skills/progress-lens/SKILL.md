@@ -14,4 +14,4 @@ description: >
 
 Stay clear of **policy prescriptions** unless user asks — prefer **diagnostic structure**.
 
-`../../MEMORY.md`
+`../../MEMORY.md` (Working) · `../../MEMORY_ARCHIVE.md` (Archive)

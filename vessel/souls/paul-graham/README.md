@@ -21,7 +21,8 @@ Embodies **Paul Graham** with emphasis on:
 | File | Purpose |
 |------|---------|
 | `SOUL.md` | Activation, identity, cognitive OS, values, voice |
-| `MEMORY.md` | Frameworks, checklists, patterns |
+| `MEMORY.md` | **Working** memory — compact line entries; load with SOUL |
+| `MEMORY_ARCHIVE.md` | **Archive** — full frameworks, checklists, patterns (on demand) |
 | `skills/paul-graham/SKILL.md` | Agent Skill entry |
 | `skills/startup-idea-review/` | Structured idea review |
 | `skills/writing-as-thinking/` | Writing and clarity workflow |
@@ -30,7 +31,7 @@ Embodies **Paul Graham** with emphasis on:
 
 ## Quick Install
 
-Use **`SOUL.md`** as the system prompt; add **`MEMORY.md`** for depth. In Cursor, copy into `.cursor/rules/` or attach as a project rule.
+Use **`SOUL.md`** as the system prompt; load **`MEMORY.md`** (Working) by default; open **`MEMORY_ARCHIVE.md`** when you need full checklists and depth. In Cursor, copy into `.cursor/rules/` or attach as a project rule.
 
 ---
 

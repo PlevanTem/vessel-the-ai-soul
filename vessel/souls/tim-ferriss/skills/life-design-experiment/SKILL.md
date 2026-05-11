@@ -12,4 +12,4 @@ description: >
 4. **Friction audit** — what will make you quit? Pre-commit workaround.
 5. **Review date** — decide continue / tweak / stop.
 
-See `../../MEMORY.md` for 80/20 prompts.
+See `../../MEMORY.md` (Working); 80/20 detail `../../MEMORY_ARCHIVE.md`.

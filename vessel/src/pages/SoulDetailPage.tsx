@@ -142,7 +142,7 @@ export default function SoulDetailPage() {
   const [copiedFile, setCopiedFile] = useState<string | null>(null)
   const [downloading, setDownloading] = useState(false)
   const [downloadDone, setDownloadDone] = useState(false)
-  const [activeFile, setActiveFile] = useState<'soul' | 'skill' | 'memory'>('soul')
+  const [activeFile, setActiveFile] = useState<'soul' | 'skill' | 'memory' | 'memoryArchive'>('soul')
   const [activeSkillFolder, setActiveSkillFolder] = useState('')
 
   const bundled = soul ? getBundledSoulPackage(soul.slug) : {}
@@ -187,6 +187,8 @@ export default function SoulDetailPage() {
 
   const soulContent = bundled.soulMd ?? soul.filePreview ?? ''
   const memoryContent = bundled.memoryMd ?? soul.memoryPreview ?? null
+  const memoryArchiveContent = bundled.memoryArchiveMd ?? null
+  const hasMemoryArchive = Boolean(memoryArchiveContent)
   const bundledSkills = getBundledSoulSkills(soul.slug)
   const fallbackSkillBody = bundled.skillMd ?? soul.skillPreview ?? null
   const skillEntries: { folder: string; content: string | null }[] =
@@ -204,7 +206,7 @@ export default function SoulDetailPage() {
 
   const explorerTreeRows: {
     reactKey: string
-    fileKey: 'soul' | 'memory' | 'skill' | null
+    fileKey: 'soul' | 'memory' | 'memoryArchive' | 'skill' | null
     skillFolder?: string
     label: string
     indent: number
@@ -212,6 +214,9 @@ export default function SoulDetailPage() {
   }[] = [
     { reactKey: 'soul', fileKey: 'soul', label: 'SOUL.md', indent: 1, branch: '├ ' },
     { reactKey: 'memory', fileKey: 'memory', label: 'MEMORY.md', indent: 1, branch: '├ ' },
+    ...(hasMemoryArchive
+      ? [{ reactKey: 'memoryArchive', fileKey: 'memoryArchive' as const, label: 'MEMORY_ARCHIVE.md', indent: 1, branch: '├ ' }]
+      : []),
     { reactKey: 'readme', fileKey: null, label: 'README.md', indent: 1, branch: '├ ' },
     { reactKey: 'skills/', fileKey: null, label: 'skills/', indent: 1, branch: '├ ' },
     ...skillFolders.map((folder, i, arr) => ({
@@ -455,7 +460,7 @@ export default function SoulDetailPage() {
                       const isActive =
                         fileKey !== null
                         && activeFile === fileKey
-                        && (fileKey !== 'skill' || skillFolder === skillFolderForPane)
+                        && (fileKey === 'skill' ? skillFolder === skillFolderForPane : true)
                       const isClickable = fileKey !== null
                       return (
                         <div
@@ -608,6 +613,29 @@ export default function SoulDetailPage() {
                       >
                         MEMORY.md
                       </button>
+                      {hasMemoryArchive ? (
+                        <button
+                          type="button"
+                          onClick={() => setActiveFile('memoryArchive')}
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.62rem',
+                            letterSpacing: '0.08em',
+                            padding: '0.4rem 0.6rem',
+                            background: 'transparent',
+                            border: 'none',
+                            borderBottom: activeFile === 'memoryArchive' ? '2px solid var(--color-accent)' : '2px solid transparent',
+                            color: activeFile === 'memoryArchive' ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                            cursor: 'pointer',
+                            transition: 'color 120ms',
+                            marginBottom: '-1px',
+                          }}
+                          onMouseEnter={(e) => { if (activeFile !== 'memoryArchive') e.currentTarget.style.color = 'var(--color-ink-muted)' }}
+                          onMouseLeave={(e) => { if (activeFile !== 'memoryArchive') e.currentTarget.style.color = 'var(--color-ink-faint)' }}
+                        >
+                          MEMORY_ARCHIVE.md
+                        </button>
+                      ) : null}
                       <span
                         style={{
                           fontFamily: 'var(--font-mono)',
@@ -636,6 +664,7 @@ export default function SoulDetailPage() {
                           const content =
                             activeFile === 'soul' ? soulContent
                             : activeFile === 'skill' ? skillPaneContent
+                            : activeFile === 'memoryArchive' ? memoryArchiveContent
                             : memoryContent
                           if (!content) {
                             return (
@@ -843,6 +872,24 @@ export default function SoulDetailPage() {
                   >
                     ▸ MEMORY.md
                   </button>
+                  {hasMemoryArchive ? (
+                    <button
+                      type="button"
+                      onClick={() => setActiveFile('memoryArchive')}
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.62rem',
+                        color: activeFile === 'memoryArchive' ? 'var(--color-accent)' : 'var(--color-ink-faint)',
+                        letterSpacing: '0.04em',
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                      }}
+                    >
+                      ▸ MEMORY_ARCHIVE.md
+                    </button>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -1040,7 +1087,9 @@ export default function SoulDetailPage() {
               <p
                 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--color-ink-faint)', letterSpacing: '0.06em', textAlign: 'center', lineHeight: 1.6 }}
               >
-                Downloads SOUL.md + SKILL.md + MEMORY.md<br />
+                Downloads SOUL.md + SKILL.md + MEMORY.md
+                {hasMemoryArchive ? ' + MEMORY_ARCHIVE.md' : ''}
+                <br />
                 as a .zip — drop into Cursor, Claude, or GPT
               </p>
 
